@@ -1,0 +1,756 @@
+{
+  "structures": {
+    "String": {
+      "label": "String",
+      "description": "Ein schreibgeschütztes Array von chars (UTF-16). Unveränderlich – jede Methode gibt eine neue Zeichenkette zurück.",
+      "initialValue": "Hallo Welt",
+      "visualType": "array",
+      "methods": {
+        "Length": {
+          "label": "Length (Eigenschaft)",
+          "params": [],
+          "description": "Gibt die Anzahl der Zeichen zurück.",
+          "signature": "public int Length { get; }",
+          "returnType": "int"
+        },
+        "IndexOf": {
+          "label": "IndexOf(string)",
+          "params": [
+            { "name": "value", "label": "Suchwert", "type": "string", "placeholder": "Welt" }
+          ],
+          "description": "Gibt den Index des ersten Vorkommens zurück, oder -1 wenn nicht gefunden.",
+          "signature": "public int IndexOf(string value)",
+          "returnType": "int"
+        },
+        "LastIndexOf": {
+          "label": "LastIndexOf(string)",
+          "params": [
+            { "name": "value", "label": "Suchwert", "type": "string", "placeholder": "l" }
+          ],
+          "description": "Gibt den Index des letzten Vorkommens zurück, oder -1.",
+          "signature": "public int LastIndexOf(string value)",
+          "returnType": "int"
+        },
+        "Substring1": {
+          "label": "Substring(startIndex)",
+          "params": [
+            { "name": "startIndex", "label": "startIndex", "type": "int", "placeholder": "6" }
+          ],
+          "description": "Gibt Teilzeichenfolge ab startIndex bis zum Ende zurück.",
+          "signature": "public string Substring(int startIndex)",
+          "returnType": "string"
+        },
+        "Substring2": {
+          "label": "Substring(startIndex, length)",
+          "params": [
+            { "name": "startIndex", "label": "startIndex", "type": "int", "placeholder": "0" },
+            { "name": "length", "label": "length", "type": "int", "placeholder": "5" }
+          ],
+          "description": "Gibt Teilzeichenfolge ab startIndex mit der angegebenen Länge zurück.",
+          "signature": "public string Substring(int startIndex, int length)",
+          "returnType": "string"
+        },
+        "Replace_SS": {
+          "label": "Replace(string, string)",
+          "params": [
+            { "name": "oldValue", "label": "oldValue", "type": "string", "placeholder": "Welt" },
+            { "name": "newValue", "label": "newValue", "type": "string", "placeholder": "C#" }
+          ],
+          "description": "Ersetzt alle Vorkommen von oldValue durch newValue.",
+          "signature": "public string Replace(string oldValue, string newValue)",
+          "returnType": "string"
+        },
+        "Replace_CC": {
+          "label": "Replace(char, char)",
+          "params": [
+            { "name": "oldChar", "label": "oldChar (1 Zeichen)", "type": "char", "placeholder": "l" },
+            { "name": "newChar", "label": "newChar (1 Zeichen)", "type": "char", "placeholder": "L" }
+          ],
+          "description": "Ersetzt alle Vorkommen eines Zeichens durch ein anderes.",
+          "signature": "public string Replace(char oldChar, char newChar)",
+          "returnType": "string"
+        },
+        "Split": {
+          "label": "Split(char[])",
+          "params": [
+            { "name": "separator", "label": "Trennzeichen", "type": "char", "placeholder": " " }
+          ],
+          "description": "Unterteilt den String an den Trennzeichen und gibt ein string[] zurück.",
+          "signature": "public string[] Split(params char[]? separator)",
+          "returnType": "string[]"
+        },
+        "Contains_S": {
+          "label": "Contains(string)",
+          "params": [
+            { "name": "value", "label": "Suchwert", "type": "string", "placeholder": "Welt" }
+          ],
+          "description": "Gibt true zurück wenn der Teilstring enthalten ist.",
+          "signature": "public bool Contains(string value)",
+          "returnType": "bool"
+        },
+        "Insert": {
+          "label": "Insert(startIndex, string)",
+          "params": [
+            { "name": "startIndex", "label": "startIndex", "type": "int", "placeholder": "5" },
+            { "name": "value", "label": "Einzufügender Text", "type": "string", "placeholder": "," }
+          ],
+          "description": "Gibt neuen String zurück mit eingefügtem Text an der Position.",
+          "signature": "public string Insert(int startIndex, string value)",
+          "returnType": "string"
+        },
+        "Remove": {
+          "label": "Remove(startIndex, count)",
+          "params": [
+            { "name": "startIndex", "label": "startIndex", "type": "int", "placeholder": "5" },
+            { "name": "count", "label": "count (Anzahl Zeichen)", "type": "int", "placeholder": "5" }
+          ],
+          "description": "Löscht 'count' Zeichen ab startIndex und gibt neuen String zurück.",
+          "signature": "public string Remove(int startIndex, int count)",
+          "returnType": "string"
+        },
+        "ToCharArray": {
+          "label": "ToCharArray()",
+          "params": [],
+          "description": "Kopiert alle Zeichen in ein char[]-Array.",
+          "signature": "public char[] ToCharArray()",
+          "returnType": "char[]"
+        },
+        "ToUpper": {
+          "label": "ToUpper()",
+          "params": [],
+          "description": "Gibt den String in Großbuchstaben zurück.",
+          "signature": "public string ToUpper()",
+          "returnType": "string"
+        },
+        "ToLower": {
+          "label": "ToLower()",
+          "params": [],
+          "description": "Gibt den String in Kleinbuchstaben zurück.",
+          "signature": "public string ToLower()",
+          "returnType": "string"
+        },
+        "Trim": {
+          "label": "Trim()",
+          "params": [],
+          "description": "Entfernt führende und nachfolgende Leerzeichen.",
+          "signature": "public string Trim()",
+          "returnType": "string"
+        },
+        "IsNullOrEmpty": {
+          "label": "IsNullOrEmpty(string) [static]",
+          "params": [],
+          "description": "Gibt an ob der String null oder leer (\"\") ist. Statische Methode.",
+          "signature": "public static bool IsNullOrEmpty(string value)",
+          "returnType": "bool"
+        },
+        "IsNullOrWhiteSpace": {
+          "label": "IsNullOrWhiteSpace(string) [static]",
+          "params": [],
+          "description": "Gibt an ob der String null, leer oder nur Leerzeichen enthält.",
+          "signature": "public static bool IsNullOrWhiteSpace(string value)",
+          "returnType": "bool"
+        }
+      }
+    },
+    "List": {
+      "label": "List<string>",
+      "description": "Typisierte, dynamisch wachsende Liste. Zugriff über Index. Namespace: System.Collections.Generic.",
+      "initialItems": ["Apfel", "Banane", "Kirsche"],
+      "visualType": "list",
+      "methods": {
+        "Add": {
+          "label": "Add(T)",
+          "params": [
+            { "name": "item", "label": "Element", "type": "string", "placeholder": "Mango" }
+          ],
+          "description": "Fügt am Ende der Liste ein Element hinzu.",
+          "signature": "public void Add(T item)",
+          "returnType": "void"
+        },
+        "Insert": {
+          "label": "Insert(index, T)",
+          "params": [
+            { "name": "index", "label": "Index", "type": "int", "placeholder": "1" },
+            { "name": "item", "label": "Element", "type": "string", "placeholder": "Pflaume" }
+          ],
+          "description": "Fügt am angegebenen Index ein Element ein.",
+          "signature": "public void Insert(int index, T item)",
+          "returnType": "void"
+        },
+        "Remove": {
+          "label": "Remove(T)",
+          "params": [
+            { "name": "item", "label": "Element", "type": "string", "placeholder": "Banane" }
+          ],
+          "description": "Entfernt das erste Vorkommen des Elements. Gibt true zurück bei Erfolg.",
+          "signature": "public bool Remove(T item)",
+          "returnType": "bool"
+        },
+        "RemoveAt": {
+          "label": "RemoveAt(index)",
+          "params": [
+            { "name": "index", "label": "Index", "type": "int", "placeholder": "0" }
+          ],
+          "description": "Entfernt das Element am angegebenen Index.",
+          "signature": "public void RemoveAt(int index)",
+          "returnType": "void"
+        },
+        "Contains": {
+          "label": "Contains(T)",
+          "params": [
+            { "name": "item", "label": "Element", "type": "string", "placeholder": "Apfel" }
+          ],
+          "description": "Gibt true zurück wenn das Element in der Liste vorhanden ist.",
+          "signature": "public bool Contains(T item)",
+          "returnType": "bool"
+        },
+        "IndexOf": {
+          "label": "IndexOf(T)",
+          "params": [
+            { "name": "item", "label": "Element", "type": "string", "placeholder": "Banane" }
+          ],
+          "description": "Gibt den nullbasierten Index des ersten Vorkommens zurück, oder -1.",
+          "signature": "public int IndexOf(T item)",
+          "returnType": "int"
+        },
+        "Sort": {
+          "label": "Sort()",
+          "params": [],
+          "description": "Sortiert die Elemente alphabetisch (Standardcomparer).",
+          "signature": "public void Sort()",
+          "returnType": "void"
+        },
+        "Reverse": {
+          "label": "Reverse()",
+          "params": [],
+          "description": "Kehrt die Reihenfolge aller Elemente um.",
+          "signature": "public void Reverse()",
+          "returnType": "void"
+        },
+        "Clear": {
+          "label": "Clear()",
+          "params": [],
+          "description": "Entfernt alle Elemente aus der Liste.",
+          "signature": "public void Clear()",
+          "returnType": "void"
+        },
+        "Count": {
+          "label": "Count (Eigenschaft)",
+          "params": [],
+          "description": "Gibt die Anzahl der enthaltenen Elemente zurück.",
+          "signature": "public int Count { get; }",
+          "returnType": "int"
+        },
+        "ToArray": {
+          "label": "ToArray()",
+          "params": [],
+          "description": "Kopiert die Elemente in ein neues Array.",
+          "signature": "public T[] ToArray()",
+          "returnType": "T[]"
+        }
+      }
+    },
+    "Stack": {
+      "label": "Stack<string>",
+      "description": "LIFO-Sammlung (Last-In-First-Out). Pushing fügt oben ein, Popping entfernt oben. Namespace: System.Collections.Generic.",
+      "initialItems": ["Seite 1", "Seite 2", "Seite 3"],
+      "visualType": "stack",
+      "methods": {
+        "Push": {
+          "label": "Push(T)",
+          "params": [
+            { "name": "item", "label": "Element", "type": "string", "placeholder": "Seite 4" }
+          ],
+          "description": "Fügt ein Element oben auf den Stack (pushing).",
+          "signature": "public void Push(T item)",
+          "returnType": "void"
+        },
+        "Pop": {
+          "label": "Pop()",
+          "params": [],
+          "description": "Entfernt das oberste Element und gibt es zurück (popping). Wirft InvalidOperationException wenn leer.",
+          "signature": "public T Pop()",
+          "returnType": "T"
+        },
+        "Peek": {
+          "label": "Peek()",
+          "params": [],
+          "description": "Gibt das oberste Element zurück OHNE es zu entfernen. Wirft InvalidOperationException wenn leer.",
+          "signature": "public T Peek()",
+          "returnType": "T"
+        },
+        "Contains": {
+          "label": "Contains(T)",
+          "params": [
+            { "name": "item", "label": "Element", "type": "string", "placeholder": "Seite 1" }
+          ],
+          "description": "Gibt true zurück wenn das Element im Stack vorhanden ist.",
+          "signature": "public bool Contains(T item)",
+          "returnType": "bool"
+        },
+        "Clear": {
+          "label": "Clear()",
+          "params": [],
+          "description": "Entfernt alle Objekte aus dem Stack.",
+          "signature": "public void Clear()",
+          "returnType": "void"
+        },
+        "Count": {
+          "label": "Count (Eigenschaft)",
+          "params": [],
+          "description": "Gibt die Anzahl der Elemente im Stack zurück.",
+          "signature": "public int Count { get; }",
+          "returnType": "int"
+        }
+      }
+    },
+    "Queue": {
+      "label": "Queue<string>",
+      "description": "FIFO-Sammlung (First-In-First-Out). Enqueue fügt hinten ein, Dequeue entfernt vorne. Namespace: System.Collections.Generic.",
+      "initialItems": ["Aufgabe A", "Aufgabe B", "Aufgabe C"],
+      "visualType": "queue",
+      "methods": {
+        "Enqueue": {
+          "label": "Enqueue(T)",
+          "params": [
+            { "name": "item", "label": "Element", "type": "string", "placeholder": "Aufgabe D" }
+          ],
+          "description": "Fügt am Ende der Queue ein Element hinzu (enqueue).",
+          "signature": "public void Enqueue(T item)",
+          "returnType": "void"
+        },
+        "Dequeue": {
+          "label": "Dequeue()",
+          "params": [],
+          "description": "Entfernt das Element am Anfang der Queue und gibt es zurück (dequeue). Wirft InvalidOperationException wenn leer.",
+          "signature": "public T Dequeue()",
+          "returnType": "T"
+        },
+        "Peek": {
+          "label": "Peek()",
+          "params": [],
+          "description": "Gibt das vorderste Element zurück OHNE es zu entfernen. Wirft InvalidOperationException wenn leer.",
+          "signature": "public T Peek()",
+          "returnType": "T"
+        },
+        "Contains": {
+          "label": "Contains(T)",
+          "params": [
+            { "name": "item", "label": "Element", "type": "string", "placeholder": "Aufgabe A" }
+          ],
+          "description": "Gibt true zurück wenn das Element in der Queue vorhanden ist.",
+          "signature": "public bool Contains(T item)",
+          "returnType": "bool"
+        },
+        "Clear": {
+          "label": "Clear()",
+          "params": [],
+          "description": "Entfernt alle Objekte aus der Queue.",
+          "signature": "public void Clear()",
+          "returnType": "void"
+        },
+        "Count": {
+          "label": "Count (Eigenschaft)",
+          "params": [],
+          "description": "Gibt die Anzahl der Elemente in der Queue zurück.",
+          "signature": "public int Count { get; }",
+          "returnType": "int"
+        }
+      }
+    },
+    "Dictionary": {
+      "label": "Dictionary<int, string>",
+      "description": "Eindeutige Schlüssel-Wert-Paare. O(1)-Zugriff per Key. Reihenfolge nicht garantiert. Namespace: System.Collections.Generic.",
+      "initialItems": [
+        { "key": 1, "value": "Huber" },
+        { "key": 2, "value": "Mayer" },
+        { "key": 3, "value": "Wimmer" }
+      ],
+      "visualType": "dictionary",
+      "methods": {
+        "Add": {
+          "label": "Add(TKey, TValue)",
+          "params": [
+            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "4" },
+            { "name": "value", "label": "Value (string)", "type": "string", "placeholder": "Schmidt" }
+          ],
+          "description": "Fügt Schlüssel-Wert-Paar hinzu. Wirft ArgumentException wenn Key bereits existiert.",
+          "signature": "public void Add(TKey key, TValue value)",
+          "returnType": "void"
+        },
+        "Remove": {
+          "label": "Remove(TKey)",
+          "params": [
+            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "2" }
+          ],
+          "description": "Entfernt den Eintrag mit dem angegebenen Key.",
+          "signature": "public bool Remove(TKey key)",
+          "returnType": "bool"
+        },
+        "ContainsKey": {
+          "label": "ContainsKey(TKey)",
+          "params": [
+            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "1" }
+          ],
+          "description": "Gibt true zurück wenn der Key im Dictionary vorhanden ist.",
+          "signature": "public bool ContainsKey(TKey key)",
+          "returnType": "bool"
+        },
+        "ContainsValue": {
+          "label": "ContainsValue(TValue)",
+          "params": [
+            { "name": "value", "label": "Value (string)", "type": "string", "placeholder": "Mayer" }
+          ],
+          "description": "Gibt true zurück wenn der Wert im Dictionary vorhanden ist.",
+          "signature": "public bool ContainsValue(TValue value)",
+          "returnType": "bool"
+        },
+        "TryGetValue": {
+          "label": "TryGetValue(TKey, out TValue)",
+          "params": [
+            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "1" }
+          ],
+          "description": "Versucht den Wert abzurufen. Gibt true zurück wenn erfolgreich, ohne Exception bei fehlendem Key.",
+          "signature": "public bool TryGetValue(TKey key, out TValue value)",
+          "returnType": "bool + out value"
+        },
+        "Clear": {
+          "label": "Clear()",
+          "params": [],
+          "description": "Entfernt alle Schlüssel und Werte.",
+          "signature": "public void Clear()",
+          "returnType": "void"
+        },
+        "Count": {
+          "label": "Count (Eigenschaft)",
+          "params": [],
+          "description": "Gibt die Anzahl der Schlüssel-Wert-Paare zurück.",
+          "signature": "public int Count { get; }",
+          "returnType": "int"
+        }
+      }
+    },
+    "SortedList": {
+      "label": "SortedList<int, string>",
+      "description": "Schlüssel-Wert-Paare, die automatisch nach Schlüssel sortiert bleiben. Namespace: System.Collections.Generic.",
+      "initialItems": [
+        { "key": 3, "value": "Zebra" },
+        { "key": 1, "value": "Apfel" },
+        { "key": 2, "value": "Mango" }
+      ],
+      "visualType": "dictionary",
+      "methods": {
+        "Add": {
+          "label": "Add(TKey, TValue)",
+          "params": [
+            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "4" },
+            { "name": "value", "label": "Value (string)", "type": "string", "placeholder": "Birne" }
+          ],
+          "description": "Fügt Schlüssel-Wert-Paar hinzu. Liste bleibt automatisch sortiert. Wirft ArgumentException bei doppeltem Key.",
+          "signature": "public void Add(TKey key, TValue value)",
+          "returnType": "void"
+        },
+        "Remove": {
+          "label": "Remove(TKey)",
+          "params": [
+            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "2" }
+          ],
+          "description": "Entfernt den Eintrag mit dem angegebenen Schlüssel.",
+          "signature": "public bool Remove(TKey key)",
+          "returnType": "bool"
+        },
+        "RemoveAt": {
+          "label": "RemoveAt(index)",
+          "params": [
+            { "name": "index", "label": "Index (Position)", "type": "int", "placeholder": "0" }
+          ],
+          "description": "Entfernt den Eintrag an der angegebenen Indexposition.",
+          "signature": "public void RemoveAt(int index)",
+          "returnType": "void"
+        },
+        "ContainsKey": {
+          "label": "ContainsKey(TKey)",
+          "params": [
+            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "1" }
+          ],
+          "description": "Gibt true zurück wenn der Schlüssel vorhanden ist.",
+          "signature": "public bool ContainsKey(TKey key)",
+          "returnType": "bool"
+        },
+        "ContainsValue": {
+          "label": "ContainsValue(TValue)",
+          "params": [
+            { "name": "value", "label": "Value (string)", "type": "string", "placeholder": "Apfel" }
+          ],
+          "description": "Gibt true zurück wenn der Wert vorhanden ist.",
+          "signature": "public bool ContainsValue(TValue value)",
+          "returnType": "bool"
+        },
+        "IndexOfKey": {
+          "label": "IndexOfKey(TKey)",
+          "params": [
+            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "2" }
+          ],
+          "description": "Gibt den nullbasierten Index des Schlüssels zurück, oder -1.",
+          "signature": "public int IndexOfKey(TKey key)",
+          "returnType": "int"
+        },
+        "IndexOfValue": {
+          "label": "IndexOfValue(TValue)",
+          "params": [
+            { "name": "value", "label": "Value (string)", "type": "string", "placeholder": "Apfel" }
+          ],
+          "description": "Gibt den nullbasierten Index des ersten Vorkommens des Werts zurück, oder -1.",
+          "signature": "public int IndexOfValue(TValue value)",
+          "returnType": "int"
+        },
+        "TryGetValue": {
+          "label": "TryGetValue(TKey, out TValue)",
+          "params": [
+            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "1" }
+          ],
+          "description": "Versucht den Wert abzurufen ohne Exception.",
+          "signature": "public bool TryGetValue(TKey key, out TValue value)",
+          "returnType": "bool + out value"
+        },
+        "Clear": {
+          "label": "Clear()",
+          "params": [],
+          "description": "Entfernt alle Elemente aus der SortedList.",
+          "signature": "public void Clear()",
+          "returnType": "void"
+        },
+        "Count": {
+          "label": "Count (Eigenschaft)",
+          "params": [],
+          "description": "Gibt die Anzahl der Schlüssel-Wert-Paare zurück.",
+          "signature": "public int Count { get; }",
+          "returnType": "int"
+        },
+        "Capacity": {
+          "label": "Capacity (Eigenschaft)",
+          "params": [],
+          "description": "Gibt die Anzahl der Elemente zurück die ohne Größenänderung aufgenommen werden können.",
+          "signature": "public int Capacity { get; set; }",
+          "returnType": "int"
+        }
+      }
+    }
+  },
+  "exercises": [
+    {
+      "id": "pk-ue1",
+      "title": "Ü1-PK: Das Logistik-Zentrum",
+      "source": "Aufgabensammlung Collections (Unterricht)",
+      "structures": ["Queue<int>", "Stack<int>"],
+      "difficulty": "Mittel",
+      "description": "Ein Logistikunternehmen verarbeitet Pakete (ID-Nummern) nach Eingangsreihenfolge (FIFO). Beschädigte Pakete kommen auf einen Rückgabe-Stapel (LIFO).",
+      "requirements": [
+        "Erstellen Sie eine Queue<int> mit den Paket-IDs: 201, 303, 204, 303, 406, 507",
+        "Ermitteln Sie die Anzahl einzigartiger Paket-IDs (Tipp: HashSet<int> kann dafür genutzt werden)",
+        "Arbeiten Sie die Queue vollständig ab (Dequeue): Ungerade ID → erfolgreich verarbeitet; Gerade ID → beschädigt → auf Stack<int> legen (Push)",
+        "Geben Sie die Anzahl eindeutiger Pakete aus",
+        "Leeren Sie den Stack vollständig (Pop) – LIFO demonstrieren"
+      ],
+      "expectedOutput": "Anzahl einzigartiger Pakete im System: 5\n--- Verarbeitungs-Prozess startet ---\nPaket 201 erfolgreich verarbeitet.\nPaket 303 erfolgreich verarbeitet.\nPaket 204 ist beschädigt -> Auf Stapel gelegt.\nPaket 303 erfolgreich verarbeitet.\nPaket 406 ist beschädigt -> Auf Stapel gelegt.\nPaket 507 erfolgreich verarbeitet.\n--- Rückgabe-Stapel wird rückwärts ausgepackt (LIFO) ---\nRückabwicklung von Paket: 406\nRückabwicklung von Paket: 204",
+      "solution": "using System;\nusing System.Collections.Generic;\n\nnamespace Unterrichtscode\n{\n    internal class Program\n    {\n        private static void Main(string[] args)\n        {\n            Queue<int> paketWarteschlange = new Queue<int>();\n            paketWarteschlange.Enqueue(201);\n            paketWarteschlange.Enqueue(303);\n            paketWarteschlange.Enqueue(204);\n            paketWarteschlange.Enqueue(303);\n            paketWarteschlange.Enqueue(406);\n            paketWarteschlange.Enqueue(507);\n\n            HashSet<int> eindeutigePakete = new HashSet<int>(paketWarteschlange);\n            Console.WriteLine($\"Anzahl einzigartiger Pakete im System: {eindeutigePakete.Count}\\n\");\n\n            Stack<int> rueckgabeStapel = new Stack<int>();\n\n            Console.WriteLine(\"--- Verarbeitungs-Prozess startet ---\");\n            while (paketWarteschlange.Count > 0)\n            {\n                int aktuellesPaket = paketWarteschlange.Dequeue();\n\n                if (aktuellesPaket % 2 == 0)\n                {\n                    Console.WriteLine($\"Paket {aktuellesPaket} ist beschädigt -> Auf Stapel gelegt.\");\n                    rueckgabeStapel.Push(aktuellesPaket);\n                }\n                else\n                {\n                    Console.WriteLine($\"Paket {aktuellesPaket} erfolgreich verarbeitet.\");\n                }\n            }\n\n            Console.WriteLine(\"\\n--- Rückgabe-Stapel wird rückwärts ausgepackt (LIFO) ---\");\n            while (rueckgabeStapel.Count > 0)\n            {\n                int zurueckgegebenesPacket = rueckgabeStapel.Pop();\n                Console.WriteLine($\"Rückabwicklung von Paket: {zurueckgegebenesPacket}\");\n            }\n        }\n    }\n}"
+    },
+    {
+      "id": "pk-ue2",
+      "title": "Ü2-PK: Der Druck-Spooler",
+      "source": "Aufgabensammlung Collections (Unterricht)",
+      "structures": ["Queue<string>", "Stack<string>"],
+      "difficulty": "Mittel",
+      "description": "In einem Büro-Netzwerk werden Druckaufträge nach Eingangsreihenfolge verarbeitet (FIFO). Dateien die nicht auf .pdf enden, schlagen fehl und kommen auf einen Fehler-Stapel (LIFO).",
+      "requirements": [
+        "Erstellen Sie eine Queue<string> mit: \"Bericht.pdf\", \"Rechnung.pdf\", \"Präsentation.pptx\", \"Rechnung.pdf\", \"Skript.docx\"",
+        "Ermitteln Sie die Anzahl eindeutiger Dokumente (Tipp: HashSet<string>)",
+        "Arbeiten Sie die Queue ab (Dequeue): Endet auf \".pdf\" → drucken; sonst → auf Stack<string> (Push)",
+        "Leeren Sie den Fehler-Stack (Pop) – neueste Fehler zuerst"
+      ],
+      "expectedOutput": "Anzahl einzigartiger Dokumente in der Warteschlange: 4\n--- Druckvorgang gestartet ---\nDrucke Dokument: Bericht.pdf\nDrucke Dokument: Rechnung.pdf\nFEHLER: Präsentation.pptx kann nicht gedruckt werden -> Auf Fehlerstapel verschoben.\nDrucke Dokument: Rechnung.pdf\nFEHLER: Skript.docx kann nicht gedruckt werden -> Auf Fehlerstapel verschoben.\n--- Nicht gedruckte Dokumente (Neueste zuerst) ---\nAdmin-Hinweis: Fehler bei Datei: Skript.docx\nAdmin-Hinweis: Fehler bei Datei: Präsentation.pptx",
+      "solution": "using System;\nusing System.Collections.Generic;\n\nnamespace Unterrichtscode\n{\n    internal class Program\n    {\n        private static void Main(string[] args)\n        {\n            Queue<string> druckWarteschlange = new Queue<string>();\n            druckWarteschlange.Enqueue(\"Bericht.pdf\");\n            druckWarteschlange.Enqueue(\"Rechnung.pdf\");\n            druckWarteschlange.Enqueue(\"Präsentation.pptx\");\n            druckWarteschlange.Enqueue(\"Rechnung.pdf\");\n            druckWarteschlange.Enqueue(\"Skript.docx\");\n\n            HashSet<string> eindeutigeDokumente = new HashSet<string>(druckWarteschlange);\n            Console.WriteLine($\"Anzahl einzigartiger Dokumente in der Warteschlange: {eindeutigeDokumente.Count}\\n\");\n\n            Stack<string> fehlerStapel = new Stack<string>();\n\n            Console.WriteLine(\"--- Druckvorgang gestartet ---\");\n            while (druckWarteschlange.Count > 0)\n            {\n                string aktuellesDokument = druckWarteschlange.Dequeue();\n\n                if (aktuellesDokument.EndsWith(\".pdf\"))\n                {\n                    Console.WriteLine($\"Drucke Dokument: {aktuellesDokument}\");\n                }\n                else\n                {\n                    Console.WriteLine($\"FEHLER: {aktuellesDokument} kann nicht gedruckt werden -> Auf Fehlerstapel verschoben.\");\n                    fehlerStapel.Push(aktuellesDokument);\n                }\n            }\n\n            Console.WriteLine(\"\\n--- Nicht gedruckte Dokumente (Neueste zuerst) ---\");\n            while (fehlerStapel.Count > 0)\n            {\n                string fehlerhafteDatei = fehlerStapel.Pop();\n                Console.WriteLine($\"Admin-Hinweis: Fehler bei Datei: {fehlerhafteDatei}\");\n            }\n        }\n    }\n}"
+    },
+    {
+      "id": "pk-ue3",
+      "title": "Ü3-PK: Das Warenkorb-System",
+      "source": "Aufgabensammlung Collections (Unterricht)",
+      "structures": ["List<int>", "Dictionary<int, string>"],
+      "difficulty": "Schwer",
+      "description": "Ein Online-Shop analysiert Einkäufe. Artikel-IDs werden in einem Warenkorb gesammelt. Das System ermittelt einzigartige Produkte, deren Kategorien und berechnet Treuepunkte.",
+      "requirements": [
+        "List<int> mit Artikel-IDs: 1001, 1002, 1001, 1003, 1002, 1004 (Duplikate = mehrfach gekauft)",
+        "Dictionary<int, string> anlegen: 1001→Elektronik, 1002→Lebensmittel, 1003→Kleidung, 1004→Elektronik",
+        "Methode BerechnePunkte(List<int>, Dictionary<int, string>) schreiben: Elektronik=10, Lebensmittel=2, Andere=5",
+        "Artikel ohne Kategorie-Eintrag überspringen (ContainsKey prüfen!)",
+        "Gesamtanzahl, Anzahl verschiedener Produkte, Punkte je Artikel und Gesamtpunkte ausgeben"
+      ],
+      "expectedOutput": "--- Warenkorb-Analyse ---\nGesamtanzahl Artikel im Warenkorb: 6\nAnzahl verschiedener Produkte: 4\n--- Punkteberechnung ---\nArtikel 1001 (Elektronik) gescannt: +10 Punkte\nArtikel 1002 (Lebensmittel) gescannt: +2 Punkte\nArtikel 1001 (Elektronik) gescannt: +10 Punkte\nArtikel 1003 (Kleidung) gescannt: +5 Punkte\nArtikel 1002 (Lebensmittel) gescannt: +2 Punkte\nArtikel 1004 (Elektronik) gescannt: +10 Punkte\nEndstand Treuepunkte: 39",
+      "solution": "using System;\nusing System.Collections.Generic;\n\nnamespace Unterrichtscode\n{\n    internal class Program\n    {\n        private static void Main(string[] args)\n        {\n            List<int> warenkorb = new List<int>();\n            warenkorb.Add(1001);\n            warenkorb.Add(1002);\n            warenkorb.Add(1001);\n            warenkorb.Add(1003);\n            warenkorb.Add(1002);\n            warenkorb.Add(1004);\n\n            HashSet<int> eindeutigeProdukte = new HashSet<int>(warenkorb);\n\n            Dictionary<int, string> kategorien = new Dictionary<int, string>();\n            kategorien[1001] = \"Elektronik\";\n            kategorien[1002] = \"Lebensmittel\";\n            kategorien[1003] = \"Kleidung\";\n            kategorien[1004] = \"Elektronik\";\n\n            Console.WriteLine(\"--- Warenkorb-Analyse ---\");\n            Console.WriteLine($\"Gesamtanzahl Artikel im Warenkorb: {warenkorb.Count}\");\n            Console.WriteLine($\"Anzahl verschiedener Produkte: {eindeutigeProdukte.Count}\\n\");\n\n            Console.WriteLine(\"--- Punkteberechnung ---\");\n            int gesamtPunkte = BerechnePunkte(warenkorb, kategorien);\n            Console.WriteLine($\"\\nEndstand Treuepunkte: {gesamtPunkte}\");\n        }\n\n        static int BerechnePunkte(List<int> warenkorb, Dictionary<int, string> kategorien)\n        {\n            int gesamtPunkte = 0;\n            foreach (int artikelId in warenkorb)\n            {\n                if (!kategorien.ContainsKey(artikelId)) continue;\n\n                string kategorie = kategorien[artikelId];\n                int punkte = 0;\n\n                if (kategorie == \"Elektronik\") punkte = 10;\n                else if (kategorie == \"Lebensmittel\") punkte = 2;\n                else punkte = 5;\n\n                Console.WriteLine($\"Artikel {artikelId} ({kategorie}) gescannt: +{punkte} Punkte\");\n                gesamtPunkte += punkte;\n            }\n            return gesamtPunkte;\n        }\n    }\n}"
+    },
+    {
+      "id": "pk-ue4",
+      "title": "Ü4-PK: Die Bibliothek",
+      "source": "Aufgabensammlung Collections (Unterricht)",
+      "structures": ["List<string>", "Dictionary<string, int>", "Stack<string>"],
+      "difficulty": "Schwer",
+      "description": "Ein Bibliothekssystem verwaltet Buch-Rückgaben. Gültige ISBNs beginnen mit \"978\" – ungültige kommen auf einen Fehler-Stapel. Gültige ISBNs werden in einem Dictionary mit ihrer Rückgabe-Häufigkeit gezählt.",
+      "requirements": [
+        "List<string> mit ISBNs: \"978-3-12-732320-7\", \"000-INVALID\", \"978-3-12-732320-7\", \"978-0-06-112008-4\", \"ABC-FALSCH\", \"978-0-7432-7356-5\"",
+        "Anzahl eindeutiger ISBNs ermitteln",
+        "foreach über die Liste: StartsWith(\"978\") → gültig → Dictionary<string,int> Zähler erhöhen (ContainsKey prüfen!); sonst → Stack<string>",
+        "Rückgabe-Häufigkeit ausgeben (foreach mit KeyValuePair)",
+        "Fehlerhafte ISBNs vom Stack ausgeben (LIFO)"
+      ],
+      "expectedOutput": "Eindeutige ISBNs in der Rückgabe: 5\n--- Rückgabeprozess ---\nISBN 978-3-12-732320-7 erfolgreich zurückgenommen.\nISBN 000-INVALID -> Auf Fehlerstapel.\nISBN 978-3-12-732320-7 erfolgreich zurückgenommen.\nISBN 978-0-06-112008-4 erfolgreich zurückgenommen.\nISBN ABC-FALSCH -> Auf Fehlerstapel.\nISBN 978-0-7432-7356-5 erfolgreich zurückgenommen.\n--- Rückgabe-Häufigkeit ---\n978-3-12-732320-7: 2x zurückgegeben\n978-0-06-112008-4: 1x zurückgegeben\n978-0-7432-7356-5: 1x zurückgegeben\n--- Fehlerhafte ISBNs (LIFO) ---\nUngültig: ABC-FALSCH\nUngültig: 000-INVALID",
+      "solution": "using System;\nusing System.Collections.Generic;\n\nnamespace Unterrichtscode\n{\n    internal class Program\n    {\n        private static void Main(string[] args)\n        {\n            List<string> rueckgaben = new List<string>();\n            rueckgaben.Add(\"978-3-12-732320-7\");\n            rueckgaben.Add(\"000-INVALID\");\n            rueckgaben.Add(\"978-3-12-732320-7\");\n            rueckgaben.Add(\"978-0-06-112008-4\");\n            rueckgaben.Add(\"ABC-FALSCH\");\n            rueckgaben.Add(\"978-0-7432-7356-5\");\n\n            HashSet<string> eindeutigeISBNs = new HashSet<string>(rueckgaben);\n            Console.WriteLine($\"Eindeutige ISBNs in der Rückgabe: {eindeutigeISBNs.Count}\\n\");\n\n            Dictionary<string, int> rueckgabeHaeufigkeit = new Dictionary<string, int>();\n            Stack<string> fehlerStapel = new Stack<string>();\n\n            Console.WriteLine(\"--- Rückgabeprozess ---\");\n            foreach (string isbn in rueckgaben)\n            {\n                if (isbn.StartsWith(\"978\"))\n                {\n                    Console.WriteLine($\"ISBN {isbn} erfolgreich zurückgenommen.\");\n                    if (rueckgabeHaeufigkeit.ContainsKey(isbn))\n                        rueckgabeHaeufigkeit[isbn]++;\n                    else\n                        rueckgabeHaeufigkeit[isbn] = 1;\n                }\n                else\n                {\n                    Console.WriteLine($\"ISBN {isbn} -> Auf Fehlerstapel.\");\n                    fehlerStapel.Push(isbn);\n                }\n            }\n\n            Console.WriteLine(\"\\n--- Rückgabe-Häufigkeit ---\");\n            foreach (KeyValuePair<string, int> eintrag in rueckgabeHaeufigkeit)\n                Console.WriteLine($\"{eintrag.Key}: {eintrag.Value}x zurückgegeben\");\n\n            Console.WriteLine(\"\\n--- Fehlerhafte ISBNs (LIFO) ---\");\n            while (fehlerStapel.Count > 0)\n                Console.WriteLine($\"Ungültig: {fehlerStapel.Pop()}\");\n        }\n    }\n}"
+    },
+    {
+      "id": "pk-ue5",
+      "title": "Ü5-PK: Der Aufgaben-Dispatcher",
+      "source": "Aufgabensammlung Collections (Unterricht)",
+      "structures": ["List<string>", "Stack<string>", "Queue<string>"],
+      "difficulty": "Mittel",
+      "description": "In einem Büro werden Aufgaben aus einer Liste verteilt. Aufgaben die mit \"DRINGEND:\" beginnen, kommen auf einen Prioritäts-Stapel (LIFO). Alle anderen in eine normale Warteschlange (FIFO).",
+      "requirements": [
+        "List<string>: \"Report erstellen\", \"DRINGEND: Server neustart\", \"Meeting vorbereiten\", \"DRINGEND: Backup prüfen\", \"E-Mails beantworten\"",
+        "foreach über die Liste: StartsWith(\"DRINGEND:\") → Stack<string>.Push(); sonst → Queue<string>.Enqueue()",
+        "Methode ZusammenfassungAusgeben(Stack<string>, Queue<string>) erstellen",
+        "Zuerst Stack abarbeiten: Peek() anzeigen, dann Pop(); danach Queue Dequeue()"
+      ],
+      "expectedOutput": "--- Dringende Aufgaben (LIFO) ---\nVorschau: DRINGEND: Backup prüfen\nErledigt: DRINGEND: Backup prüfen\n\nVorschau: DRINGEND: Server neustart\nErledigt: DRINGEND: Server neustart\n--- Normale Aufgaben (FIFO) ---\nAufgabe: Report erstellen\nAufgabe: Meeting vorbereiten\nAufgabe: E-Mails beantworten",
+      "solution": "using System;\nusing System.Collections.Generic;\n\nnamespace Unterrichtscode\n{\n    internal class Program\n    {\n        private static void Main(string[] args)\n        {\n            List<string> aufgaben = new List<string>();\n            aufgaben.Add(\"Report erstellen\");\n            aufgaben.Add(\"DRINGEND: Server neustart\");\n            aufgaben.Add(\"Meeting vorbereiten\");\n            aufgaben.Add(\"DRINGEND: Backup prüfen\");\n            aufgaben.Add(\"E-Mails beantworten\");\n\n            Stack<string> prioritaetsStapel = new Stack<string>();\n            Queue<string> normaleWarteschlange = new Queue<string>();\n\n            foreach (string aufgabe in aufgaben)\n            {\n                if (aufgabe.StartsWith(\"DRINGEND:\"))\n                    prioritaetsStapel.Push(aufgabe);\n                else\n                    normaleWarteschlange.Enqueue(aufgabe);\n            }\n\n            ZusammenfassungAusgeben(prioritaetsStapel, normaleWarteschlange);\n        }\n\n        static void ZusammenfassungAusgeben(Stack<string> prioritaet, Queue<string> normal)\n        {\n            Console.WriteLine(\"--- Dringende Aufgaben (LIFO) ---\");\n            while (prioritaet.Count > 0)\n            {\n                Console.WriteLine($\"Vorschau: {prioritaet.Peek()}\");\n                Console.WriteLine($\"Erledigt: {prioritaet.Pop()}\\n\");\n            }\n\n            Console.WriteLine(\"--- Normale Aufgaben (FIFO) ---\");\n            while (normal.Count > 0)\n                Console.WriteLine($\"Aufgabe: {normal.Dequeue()}\");\n        }\n    }\n}"
+    },
+    {
+      "id": "nb-ue1",
+      "title": "Ü1-NB: Büromaterial-Verwaltung",
+      "source": "Class Notebook – Übungsbeispiele Collections",
+      "structures": ["Dictionary<string, int>"],
+      "difficulty": "Mittel",
+      "description": "Verwaltung von Büromaterial-Bestand in einem Unternehmen. Materialien nach Typ sortiert und einfach abrufbar.",
+      "requirements": [
+        "Dictionary<string, int> – Key: Materialtyp (z.B. \"Stifte\"), Value: Menge",
+        "Methode AddItem(Dictionary, string, int): fügt neues Material hinzu ODER aktualisiert vorhandene Menge",
+        "Methode RemoveItem(Dictionary, string, int): entfernt Menge – Bestand darf nicht unter 0 sinken",
+        "Methode GetStock(Dictionary): gibt aktuellen Bestand aus"
+      ],
+      "expectedOutput": "Bestand nach Auffüllung:\nStifte: 20\nPapier: 100\nOrdner: 15\nNach Entnahme:\nStifte: 15\nPapier: 100\nOrdner: 15",
+      "solution": null
+    },
+    {
+      "id": "nb-ue2",
+      "title": "Ü2-NB: Text entschlüsseln",
+      "source": "Class Notebook – Übungsbeispiele Collections",
+      "structures": ["List<string>"],
+      "difficulty": "Schwer",
+      "description": "Verschlüsselten komprimierten Text expandieren. Format: \"3a2b4x1d\" → \"aaabbxxxd\". Steht kein Ziffernwert vor Buchstaben, wird 1 angenommen.",
+      "requirements": [
+        "Methode ReadCompressedText(): liest Wörter ein (durch Leerzeichen getrennt) in eine Collection; Ende bei leerem String",
+        "Methode Test(string): prüft ob String gültigen Aufbau hat (Ziffer + Buchstabe oder nur 1 Buchstabe) – gibt bool zurück",
+        "Methode ExpandText(string): expandiert einen String nach der Vorschrift",
+        "Beispiel: Eingabe \"3a2b4x1d0f1ga\" → Ausgabe \"aaabbxxxxdga\""
+      ],
+      "expectedOutput": "Eingabe: 3a2b4x\nAusgabe: aaabbxxxx",
+      "solution": null
+    },
+    {
+      "id": "nb-ue3",
+      "title": "Ü3-NB: Bestellungen (SortedList)",
+      "source": "Class Notebook – Übungsbeispiele Collections",
+      "structures": ["SortedList<DateTime, List<string>>"],
+      "difficulty": "Schwer",
+      "description": "Verwaltung von Online-Shop-Bestellungen, automatisch nach Bestelldatum sortiert.",
+      "requirements": [
+        "SortedList<DateTime, List<string>> – Key: Bestelldatum, Value: Liste der Bestellnummern",
+        "Methode AddOrder(SortedList, DateTime, string): fügt Bestellung hinzu; Liste bleibt automatisch sortiert",
+        "Methode GetOrdersByDate(SortedList, DateTime): gibt alle Bestellnummern für ein Datum zurück",
+        "Methode GetLatestOrders(SortedList, int n): gibt die letzten n Bestelldaten zurück",
+        "DateTime-Format als String: \"2026-12-24\" → DateTime.Parse(\"2026-12-24\")"
+      ],
+      "expectedOutput": "Bestellungen am 2026-01-15: ORD-001, ORD-003\nNeueste 2 Bestelldaten:\n2026-02-01\n2026-01-20",
+      "solution": null
+    },
+    {
+      "id": "nb-ue4",
+      "title": "Ü4-NB: Wörterbuch (Dictionary)",
+      "source": "Class Notebook – Übungsbeispiele Collections",
+      "structures": ["Dictionary<string, Dictionary<string, string>>"],
+      "difficulty": "Schwer",
+      "description": "Mehrsprachiges Wörterbuch verwalten. Dictionary<string, Dictionary<string, string>> – äußerer Key = Wort, innerer Key = Sprachkürzel.",
+      "requirements": [
+        "AddWordTranslation(dictionary, wort, sprache, übersetzung): fügt neue Übersetzung hinzu",
+        "UpdateWordTranslation(dictionary, wort, sprache, neueÜbersetzung): aktualisiert vorhandene Übersetzung",
+        "GetWordTranslation(dictionary, wort, sprache): gibt Übersetzung zurück oder \"*Wort im Wörterbuch nicht vorhanden*\"",
+        "DisplayAllTranslations(dictionary): gibt alle Wörter und Übersetzungen aus"
+      ],
+      "expectedOutput": "Hallo in HU = Szia\nHallo in SK = Dobrý deň\nHallo in HR = *Wort im Wörterbuch nicht vorhanden*",
+      "solution": "using System;\nusing System.Collections.Generic;\n\nnamespace Unterrichtscode\n{\n    internal class Program\n    {\n        private static void Main(string[] args)\n        {\n            Dictionary<string, Dictionary<string, string>> dictionary =\n                new Dictionary<string, Dictionary<string, string>>();\n\n            AddWordTranslation(dictionary, \"Hallo\", \"EN\", \"Hello\");\n            AddWordTranslation(dictionary, \"Hallo\", \"HU\", \"Szia\");\n            AddWordTranslation(dictionary, \"Hallo\", \"SK\", \"Dobrý deň\");\n\n            DisplayAllTranslations(dictionary);\n\n            UpdateWordTranslation(dictionary, \"Hallo\", \"EN\", \"Hi\");\n\n            Console.WriteLine(\"Hallo in HU = {0} \", GetWordTranslation(dictionary, \"Hallo\", \"HU\"));\n            Console.WriteLine(\"Hallo in SK = {0}\", GetWordTranslation(dictionary, \"Hallo\", \"SK\"));\n            Console.WriteLine(\"Hallo in HR = {0}\", GetWordTranslation(dictionary, \"Hallo\", \"HR\"));\n\n            DisplayAllTranslations(dictionary);\n        }\n\n        static void AddWordTranslation(Dictionary<string, Dictionary<string, string>> dict, string wort, string sprache, string uebersetzung)\n        {\n            if (!dict.ContainsKey(wort))\n                dict[wort] = new Dictionary<string, string>();\n            dict[wort][sprache] = uebersetzung;\n        }\n\n        static void UpdateWordTranslation(Dictionary<string, Dictionary<string, string>> dict, string wort, string sprache, string neueUebersetzung)\n        {\n            if (dict.ContainsKey(wort) && dict[wort].ContainsKey(sprache))\n                dict[wort][sprache] = neueUebersetzung;\n        }\n\n        static string GetWordTranslation(Dictionary<string, Dictionary<string, string>> dict, string wort, string sprache)\n        {\n            if (dict.ContainsKey(wort) && dict[wort].ContainsKey(sprache))\n                return dict[wort][sprache];\n            return \"*Wort im Wörterbuch nicht vorhanden*\";\n        }\n\n        static void DisplayAllTranslations(Dictionary<string, Dictionary<string, string>> dict)\n        {\n            foreach (var eintrag in dict)\n            {\n                Console.Write($\"{eintrag.Key}: \");\n                foreach (var uebersetzung in eintrag.Value)\n                    Console.Write($\"[{uebersetzung.Key}: {uebersetzung.Value}] \");\n                Console.WriteLine();\n            }\n        }\n    }\n}"
+    },
+    {
+      "id": "nb-ue5",
+      "title": "Ü5-NB: Browserverlauf (Stack)",
+      "source": "Class Notebook – Übungsbeispiele Collections",
+      "structures": ["Stack<string>"],
+      "difficulty": "Leicht",
+      "description": "Einfacher Webbrowser – Navigationsverlauf in LIFO-Reihenfolge verwalten.",
+      "requirements": [
+        "Stack<string> für URLs",
+        "Methode VisitPage(Stack, string url): fügt neue URL auf den Stack (Push)",
+        "Methode GoBack(Stack): entfernt letzte URL (Pop) und gibt sie zurück",
+        "Methode GetCurrentPage(Stack): gibt aktuelle URL zurück ohne sie zu entfernen (Peek)"
+      ],
+      "expectedOutput": "Aktuelle Seite: https://google.at\nZurück zu: https://google.at\nAktuelle Seite: https://orf.at",
+      "solution": null
+    },
+    {
+      "id": "nb-ue6",
+      "title": "Ü6-NB: To-Do-Liste (Queue)",
+      "source": "Class Notebook – Übungsbeispiele Collections",
+      "structures": ["Queue<string>"],
+      "difficulty": "Leicht",
+      "description": "Einfache To-Do-Liste in FIFO-Reihenfolge (First-In-First-Out).",
+      "requirements": [
+        "Queue<string> für Aufgaben",
+        "Methode AddTask(Queue, string): neue Aufgabe hinzufügen (Enqueue)",
+        "Methode CompleteTask(Queue): älteste Aufgabe entfernen und als erledigt ausgeben (Dequeue)",
+        "Methode GetNextTask(Queue): nächste Aufgabe anzeigen ohne zu entfernen (Peek)"
+      ],
+      "expectedOutput": "Nächste Aufgabe: Emails beantworten\nErledigt: Emails beantworten\nNächste Aufgabe: Report schreiben",
+      "solution": null
+    },
+    {
+      "id": "nb-ue7",
+      "title": "Ü7-NB: Klammerncheck (Stack)",
+      "source": "Class Notebook – Übungsbeispiele Collections",
+      "structures": ["Stack<char>"],
+      "difficulty": "Mittel",
+      "description": "Prüft ob Klammern in einer Zeichenkette korrekt geschachtelt sind, mit einem Stack.",
+      "requirements": [
+        "Zeichenkette enthält nur '(' und ')'",
+        "Stack<char> verwenden",
+        "Öffnende Klammer '(' → Push auf Stack",
+        "Schließende Klammer ')' → wenn Stack leer → False; sonst Pop",
+        "Am Ende: Stack muss leer sein für True",
+        "Beispiele: \"((()))\" → True; \"(())) \" → False; \"()(())\" → True"
+      ],
+      "expectedOutput": "((())) → True\n(())) → False\n()(()) → True",
+      "solution": null
+    },
+    {
+      "id": "nb-ue8",
+      "title": "Ü8-NB: Verschlüsselung (Dictionary/List)",
+      "source": "Class Notebook – Übungsbeispiele Collections",
+      "structures": ["List<char>", "Dictionary<char, char>"],
+      "difficulty": "Schwer",
+      "description": "Verschlüsselungsverfahren mit einem Schlüssel-String. Jeder Buchstabe des Alphabets wird einem Zeichen aus dem Schlüssel zugeordnet.",
+      "requirements": [
+        "Schlüssel: \"qwertzuiopasdfghjklyxcvbnm\" → entspricht a-z",
+        "Methode Encrypt(List<char> verschlüsselung, string satz): verschlüsselt den Satz",
+        "Gibt verschlüsselten String zurück, oder null bei Fehler",
+        "Beispiel: \"hallo\" → \"ilaag\""
+      ],
+      "expectedOutput": "hallo → ilaag",
+      "solution": null
+    }
+  ]
+}
