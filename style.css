@@ -634,8 +634,8 @@ textarea { resize: vertical; min-height: 60px; }
   text-transform: uppercase;
 }
 
-.queue-end-in  { background: var(--green-dim); color: var(--green); border-right: 1px solid var(--border); }
-.queue-end-out { background: var(--red-dim);   color: var(--red);   border-left:  1px solid var(--border); }
+.queue-end-in  { background: var(--green-dim); color: var(--green); border-left:  1px solid var(--border); }
+.queue-end-out { background: var(--red-dim);   color: var(--red);   border-right: 1px solid var(--border); }
 
 .queue-items {
   display: flex;
@@ -1073,12 +1073,12 @@ textarea { resize: vertical; min-height: 60px; }
   .tab-btn:hover { color: var(--text1); }
   .tab-btn.active { color: var(--cyan); border-bottom-color: var(--cyan); }
 
-  /* Simulator: 3-column grid */
+  /* Simulator: 3-column grid, fills viewport below header */
   .sim-layout {
     display: grid;
     grid-template-columns: 260px 1fr 300px;
-    flex-direction: unset;
-    min-height: calc(100vh - var(--header-h));
+    grid-template-rows: 1fr;
+    height: calc(100vh - var(--header-h));
   }
 
   /* Panels: side borders, no collapse */
@@ -1108,10 +1108,11 @@ textarea { resize: vertical; min-height: 60px; }
 
   .output-panel .panel-header { pointer-events: none; cursor: default; }
 
-  /* Panel body scroll on desktop */
+  /* Panel body: grow to fill panel, scroll when needed */
   .panel-body {
+    flex: 1;
     overflow-y: auto;
-    max-height: calc(100vh - var(--header-h) - 50px);
+    min-height: 0;
   }
 
   /* Inputs: normal size on desktop */
@@ -1128,15 +1129,15 @@ textarea { resize: vertical; min-height: 60px; }
 
   .vis-canvas { padding: 32px 24px; }
 
-  /* Output log: taller on desktop */
-  .output-log { max-height: calc(100vh - var(--header-h) - 120px); }
+  /* Output log: fills remaining space in output panel */
+  .output-log { flex: 1; max-height: unset; min-height: 0; }
 
-  /* Exercises: sidebar + detail */
+  /* Exercises: sidebar + detail, fills viewport below header */
   .exercises-layout {
     display: grid;
     grid-template-columns: 240px 1fr;
-    min-height: calc(100vh - var(--header-h));
-    flex-direction: unset;
+    grid-template-rows: 1fr;
+    height: calc(100vh - var(--header-h));
   }
 
   .ex-sidebar {
@@ -1146,7 +1147,6 @@ textarea { resize: vertical; min-height: 60px; }
     border-bottom: none;
     border-right: 1px solid var(--border);
     padding: 12px 0;
-    max-height: calc(100vh - var(--header-h));
   }
 
   .ex-sidebar-header { padding: 8px 16px 12px; }
@@ -1155,7 +1155,8 @@ textarea { resize: vertical; min-height: 60px; }
 
   .ex-detail {
     padding: 32px 40px;
-    max-height: calc(100vh - var(--header-h));
+    overflow-y: auto;
+    max-height: unset;
   }
 
   .ex-title { font-size: 22px; }

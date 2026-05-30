@@ -907,6 +907,11 @@ function showExercise(id, el) {
 
   const detail = document.getElementById('ex-detail');
 
+  // On mobile, scroll detail into view after render
+  if (window.innerWidth < 768) {
+    setTimeout(() => detail.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }
+
   const reqItems = ex.requirements.map(r => `<li>${escHtml(r)}</li>`).join('');
   const structTags = ex.structures.map(s => `<span class="struct-tag">${escHtml(s)}</span>`).join(' ');
 
@@ -956,11 +961,11 @@ function toggleSolution(btn) {
   btn.classList.toggle('open');
   const body = btn.nextElementSibling;
   body.classList.toggle('open');
-  btn.textContent = btn.classList.contains('open') ? '🔓 Lösung verbergen ' : '🔒 Lösung anzeigen ';
-  const icon = document.createElement('span');
-  icon.className = 'toggle-icon';
-  icon.textContent = '▼';
-  btn.appendChild(icon);
+  const isOpen = btn.classList.contains('open');
+  const textNode = btn.firstChild;
+  if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+    textNode.textContent = isOpen ? '🔓 Lösung verbergen ' : '🔒 Lösung anzeigen ';
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
