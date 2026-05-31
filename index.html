@@ -21,6 +21,7 @@
     <nav class="tab-bar">
       <button class="tab-btn active" onclick="switchTab('simulator', this)">⬡ Simulator</button>
       <button class="tab-btn" onclick="switchTab('exercises', this)">≡ Übungsaufgaben</button>
+      <button class="tab-btn" onclick="switchTab('referenz', this)">📖 Referenz</button>
     </nav>
   </header>
 
@@ -33,6 +34,10 @@
     <button class="bottom-nav-btn" id="bnav-ex" onclick="switchTabMobile('exercises', this)">
       <span class="nav-icon">≡</span>
       <span>Übungen</span>
+    </button>
+    <button class="bottom-nav-btn" id="bnav-ref" onclick="switchTabMobile('referenz', this)">
+      <span class="nav-icon">📖</span>
+      <span>Referenz</span>
     </button>
   </nav>
 
@@ -120,6 +125,682 @@
   </div><!-- /tab-simulator -->
 
   <!-- ═══════════════════════════════════════════════
+       TAB: REFERENZ
+  ═══════════════════════════════════════════════ -->
+  <div id="tab-referenz" class="tab-content">
+    <div class="ref-layout">
+
+      <!-- Sticky sidebar nav (desktop only) -->
+      <nav class="ref-sidenav" id="ref-sidenav">
+        <div class="ref-sidenav-header">Inhalt</div>
+        <a class="ref-navlink" href="#ref-immut">⚠️ Immutability</a>
+        <a class="ref-navlink" href="#ref-props">📐 Eigenschaften</a>
+        <a class="ref-navlink" href="#ref-search">🔍 Such-Methoden</a>
+        <a class="ref-navlink" href="#ref-extract">✂️ Extraktion</a>
+        <a class="ref-navlink" href="#ref-modify">✏️ Ändern</a>
+        <a class="ref-navlink" href="#ref-static">🛡️ Statische Prüfmethoden</a>
+        <a class="ref-navlink" href="#ref-exceptions">🚨 Exception Handling</a>
+        <a class="ref-navlink" href="#ref-string-table">📋 String-Übersicht</a>
+        <a class="ref-navlink" href="#ref-collections">📦 Collections</a>
+        <a class="ref-navlink" href="#ref-list">1. List&lt;T&gt;</a>
+        <a class="ref-navlink" href="#ref-dict">2. Dictionary</a>
+        <a class="ref-navlink" href="#ref-sortedlist">3. SortedList</a>
+        <a class="ref-navlink" href="#ref-stack">4. Stack&lt;T&gt;</a>
+        <a class="ref-navlink" href="#ref-queue">5. Queue&lt;T&gt;</a>
+        <a class="ref-navlink" href="#ref-coll-table">📋 Collections-Übersicht</a>
+      </nav>
+
+      <!-- Main content -->
+      <div class="ref-content">
+
+        <div class="ref-page-header">
+          <h1 class="ref-h1">C# String &amp; Exception Referenz</h1>
+          <p class="ref-subtitle">HTL POS1 — Vollständige Methodenreferenz mit try-catch</p>
+        </div>
+
+        <!-- IMMUTABILITY -->
+        <div class="ref-section" id="ref-immut">
+          <h2 class="ref-h2">⚠️ Das wichtigste Konzept: Immutability</h2>
+          <p class="ref-prose">Strings sind <strong class="ref-strong">unveränderlich (immutable)</strong>. Jede Methode erzeugt ein <strong class="ref-strong">neues</strong> String-Objekt. Der alte String bleibt unverändert — Ergebnis immer zuweisen!</p>
+          <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"Hallo"</span>;
+s.Replace(<span class="tok-str">"Hallo"</span>, <span class="tok-str">"Welt"</span>);       <span class="tok-cmt">// ❌ Ergebnis wird verworfen!</span>
+s = s.Replace(<span class="tok-str">"Hallo"</span>, <span class="tok-str">"Welt"</span>);  <span class="tok-cmt">// ✅ immer zuweisen!</span></pre>
+        </div>
+
+        <!-- EIGENSCHAFTEN -->
+        <h2 class="ref-h2-section" id="ref-props">📐 Eigenschaften (keine Klammern!)</h2>
+
+        <div class="ref-section">
+          <div class="ref-method-head">
+            <span class="ref-method-name">s.Length</span>
+            <span class="ref-tag ref-tag-prop">Eigenschaft</span>
+            <span class="ref-returns">→ int</span>
+          </div>
+          <div class="ref-when">Wann: Immer wenn du Zeichen zählst — für Schleifen, Substring, Bedingungen. KEINE Klammern!</div>
+          <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"Hallo"</span>;
+Console.WriteLine(s.Length);       <span class="tok-cmt">// → 5</span>
+Console.WriteLine(s.Length - <span class="tok-num">1</span>);  <span class="tok-cmt">// → 4 (Index des letzten Zeichens)</span></pre>
+          <div class="ref-note">❌ Häufiger Fehler: s.Length() mit Klammern → Compilerfehler!</div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-method-head">
+            <span class="ref-method-name">s[index]</span>
+            <span class="ref-tag ref-tag-prop">Indexer</span>
+            <span class="ref-returns">→ char</span>
+          </div>
+          <div class="ref-when">Wann: Einzelne Zeichen lesen. Schreiben auf den String direkt ist verboten!</div>
+          <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"Hallo"</span>;
+<span class="tok-type">char</span> erstes = s[<span class="tok-num">0</span>];              <span class="tok-cmt">// → 'H'</span>
+<span class="tok-type">char</span> letztes = s[s.Length - <span class="tok-num">1</span>]; <span class="tok-cmt">// → 'o'</span>
+<span class="tok-cmt">// ❌ Verboten — String ist schreibgeschützt:</span>
+s[<span class="tok-num">0</span>] = <span class="tok-str">'X'</span>;  <span class="tok-cmt">// → Compilerfehler!</span></pre>
+        </div>
+
+        <!-- SUCH-METHODEN -->
+        <h2 class="ref-h2-section" id="ref-search">🔍 Such-Methoden</h2>
+        <div class="ref-grid">
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">s.IndexOf(wert)</span><span class="ref-returns">→ int</span></div>
+            <div class="ref-when">Erstes Vorkommen finden. Gibt -1 zurück wenn nicht gefunden!</div>
+            <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"animal"</span>;
+<span class="tok-type">int</span> pos = s.IndexOf(<span class="tok-str">"n"</span>);  <span class="tok-cmt">// → 1</span>
+<span class="tok-type">int</span> pos2 = s.IndexOf(<span class="tok-str">"z"</span>); <span class="tok-cmt">// → -1</span>
+<span class="tok-kw">if</span> (pos != -<span class="tok-num">1</span>) { <span class="tok-cmt">// ✅ immer prüfen!</span> }</pre>
+          </div>
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">s.LastIndexOf(wert)</span><span class="ref-returns">→ int</span></div>
+            <div class="ref-when">Letztes Vorkommen — sucht von hinten. Gibt -1 wenn nicht gefunden.</div>
+            <pre class="ref-pre"><span class="tok-type">string</span> pfad = <span class="tok-str">@"c:\folder\file.txt"</span>;
+<span class="tok-type">int</span> pos = pfad.LastIndexOf(<span class="tok-str">'.'</span>); <span class="tok-cmt">// → 15</span>
+<span class="tok-type">string</span> ext = pfad.Substring(pos); <span class="tok-cmt">// → ".txt"</span></pre>
+          </div>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">s.Contains(wert)</span><span class="ref-returns">→ bool</span></div>
+            <div class="ref-when">Prüft ob ein Zeichen/String vorkommt.</div>
+            <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"The quick brown fox"</span>;
+Console.WriteLine(s.Contains(<span class="tok-str">"fox"</span>)); <span class="tok-cmt">// True</span>
+Console.WriteLine(s.Contains(<span class="tok-str">'z'</span>));   <span class="tok-cmt">// False</span></pre>
+          </div>
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">StartsWith / EndsWith</span><span class="ref-returns">→ bool</span></div>
+            <div class="ref-when">Anfang/Ende prüfen — URLs, Dateiendungen, Validierung.</div>
+            <pre class="ref-pre"><span class="tok-type">string</span> url = <span class="tok-str">"www.google.com"</span>;
+Console.WriteLine(url.StartsWith(<span class="tok-str">"www."</span>)); <span class="tok-cmt">// True</span>
+Console.WriteLine(url.EndsWith(<span class="tok-str">".com"</span>));  <span class="tok-cmt">// True</span></pre>
+          </div>
+        </div>
+
+        <!-- EXTRAKTION -->
+        <h2 class="ref-h2-section" id="ref-extract">✂️ Extraktions-Methoden</h2>
+
+        <div class="ref-section">
+          <div class="ref-method-head"><span class="ref-method-name">s.Substring(startIndex)</span><span class="ref-returns">→ string</span> — ab Index bis Ende</div>
+          <div class="ref-when">Alles ab einer bestimmten Position bis zum Ende holen.</div>
+          <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"c# is what I love and what I love is c#"</span>;
+<span class="tok-type">string</span> teil = s.Substring(<span class="tok-num">27</span>);
+Console.WriteLine(teil); <span class="tok-cmt">// → "what I love is c#"</span></pre>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-method-head"><span class="ref-method-name">s.Substring(startIndex, länge)</span><span class="ref-returns">→ string</span> — genau N Zeichen</div>
+          <div class="ref-when">Genau N Zeichen ab einer Position ausschneiden.</div>
+          <div class="ref-note">⚠️ 2. Parameter ist die LÄNGE, NICHT der Endindex!</div>
+          <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"Hallo Welt"</span>;
+<span class="tok-type">string</span> teil = s.Substring(<span class="tok-num">6</span>, <span class="tok-num">4</span>);
+Console.WriteLine(teil); <span class="tok-cmt">// → "Welt" (ab Index 6, 4 Zeichen)</span>
+
+<span class="tok-cmt">// Klassisch: Dateiname ohne Extension</span>
+<span class="tok-type">string</span> pfad = <span class="tok-str">@"c:\folder\myFile.txt"</span>;
+<span class="tok-type">int</span> start  = pfad.LastIndexOf(<span class="tok-str">'\\'</span>) + <span class="tok-num">1</span>;
+<span class="tok-type">int</span> punkt  = pfad.LastIndexOf(<span class="tok-str">'.'</span>);
+<span class="tok-type">string</span> name = pfad.Substring(start, punkt - start); <span class="tok-cmt">// → "myFile"</span></pre>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-method-head"><span class="ref-method-name">s.ToCharArray()</span><span class="ref-returns">→ char[]</span></div>
+          <div class="ref-when">Beschreibbares char-Array erzeugen — wenn du einzelne Zeichen verändern musst.</div>
+          <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"AaBbCcDd"</span>;
+<span class="tok-type">char</span>[] chars = s.ToCharArray();
+<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; chars.Length; i++)
+    Console.WriteLine(i + <span class="tok-str">": "</span> + chars[i]);
+chars[<span class="tok-num">0</span>] = <span class="tok-str">'x'</span>; <span class="tok-cmt">// ✅ char[] ist beschreibbar!</span></pre>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-method-head"><span class="ref-method-name">s.Split(trennzeichen)</span><span class="ref-returns">→ string[]</span></div>
+          <div class="ref-when">String bei einem Trennzeichen in Teile aufteilen — häufigste Test-Methode!</div>
+          <pre class="ref-pre"><span class="tok-type">string</span> csv = <span class="tok-str">"Mathe;Deutsch;Englisch;POS1"</span>;
+<span class="tok-type">string</span>[] faecher = csv.Split(<span class="tok-str">';'</span>);
+<span class="tok-cmt">// faecher[0]="Mathe", [1]="Deutsch", ...</span>
+<span class="tok-kw">foreach</span> (<span class="tok-type">string</span> f <span class="tok-kw">in</span> faecher) Console.WriteLine(f);
+
+<span class="tok-cmt">// Mehrere Trennzeichen:</span>
+<span class="tok-type">string</span>[] teile = text.Split(<span class="tok-kw">new</span> <span class="tok-type">char</span>[] { <span class="tok-str">','</span>, <span class="tok-str">';'</span>, <span class="tok-str">' '</span> });</pre>
+        </div>
+
+        <!-- ÄNDERN -->
+        <h2 class="ref-h2-section" id="ref-modify">✏️ Änderungs-Methoden (immer Ergebnis zuweisen!)</h2>
+
+        <div class="ref-section">
+          <div class="ref-method-head"><span class="ref-method-name">s.Insert(index, wert)</span><span class="ref-returns">→ string</span></div>
+          <div class="ref-when">Fügt einen String VOR dem angegebenen Index ein.</div>
+          <div class="ref-note ref-note-ok">✅ Insert-Index: 0 = Anfang | Length = Ende (KEIN Length-1 fürs Ende!)</div>
+          <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"aaabbb"</span>;
+<span class="tok-type">string</span> result = s.Insert(<span class="tok-num">3</span>, <span class="tok-str">" "</span>);
+Console.WriteLine(result); <span class="tok-cmt">// → "aaa bbb"</span>
+
+<span class="tok-type">string</span> r2 = s.Insert(<span class="tok-num">0</span>, <span class="tok-str">">>> "</span>);   <span class="tok-cmt">// → ">>> aaabbb"</span>
+<span class="tok-type">string</span> r3 = s.Insert(s.Length, <span class="tok-str">"!"</span>); <span class="tok-cmt">// → "aaabbb!" (Length, nicht Length-1!)</span></pre>
+          <div class="ref-note">Warum Length und nicht Length-1? Insert fügt VOR dem Index ein. Index Length ist die Position NACH dem letzten Zeichen.</div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-method-head"><span class="ref-method-name">s.Remove(startIndex, anzahl)</span><span class="ref-returns">→ string</span></div>
+          <div class="ref-when">Löscht eine bestimmte Anzahl Zeichen ab dem angegebenen Index.</div>
+          <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"Hello World"</span>;
+<span class="tok-type">string</span> r = s.Remove(<span class="tok-num">5</span>, <span class="tok-num">6</span>); <span class="tok-cmt">// ab Index 5, 6 Zeichen weg</span>
+Console.WriteLine(r);      <span class="tok-cmt">// → "Hello"</span>
+
+<span class="tok-cmt">// Extension entfernen:</span>
+<span class="tok-type">string</span> datei = <span class="tok-str">"myFile.txt"</span>;
+<span class="tok-type">int</span> punkt = datei.LastIndexOf(<span class="tok-str">'.'</span>);
+<span class="tok-type">string</span> ohneExt = datei.Remove(punkt, datei.Length - punkt);
+Console.WriteLine(ohneExt); <span class="tok-cmt">// → "myFile"</span></pre>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-method-head"><span class="ref-method-name">s.Replace(alt, neu)</span><span class="ref-returns">→ string</span></div>
+          <div class="ref-when">Ersetzt ALLE Vorkommen eines Zeichens/Strings durch einen neuen Wert.</div>
+          <pre class="ref-pre"><span class="tok-cmt">// String → String</span>
+<span class="tok-type">string</span> s = <span class="tok-str">"This docment uses docments"</span>;
+s = s.Replace(<span class="tok-str">"docment"</span>, <span class="tok-str">"document"</span>);
+Console.WriteLine(s); <span class="tok-cmt">// → "This document uses documents"</span>
+
+<span class="tok-cmt">// char → char</span>
+<span class="tok-type">string</span> csv = <span class="tok-str">"1 2 3 4 5"</span>;
+csv = csv.Replace(<span class="tok-str">' '</span>, <span class="tok-str">','</span>);
+Console.WriteLine(csv); <span class="tok-cmt">// → "1,2,3,4,5"</span></pre>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-method-head"><span class="ref-method-name">s.Trim()</span><span class="ref-returns">→ string</span></div>
+          <div class="ref-when">Entfernt führende und nachfolgende Leerzeichen. Immer vor TryParse und nach Eingaben!</div>
+          <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"  Hallo Welt  "</span>;
+Console.WriteLine(s.Trim());       <span class="tok-cmt">// → "Hallo Welt"</span>
+Console.WriteLine(s.TrimStart()); <span class="tok-cmt">// → "Hallo Welt  "</span>
+Console.WriteLine(s.TrimEnd());   <span class="tok-cmt">// → "  Hallo Welt"</span></pre>
+        </div>
+
+        <div class="ref-grid">
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">s.ToUpper()</span><span class="ref-returns">→ string</span></div>
+            <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"Hallo"</span>;
+Console.WriteLine(s.ToUpper()); <span class="tok-cmt">// → "HALLO"</span></pre>
+          </div>
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">s.ToLower()</span><span class="ref-returns">→ string</span></div>
+            <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"HALLO"</span>;
+Console.WriteLine(s.ToLower()); <span class="tok-cmt">// → "hallo"</span>
+<span class="tok-kw">if</span> (s.ToLower() == <span class="tok-str">"ja"</span>) { } <span class="tok-cmt">// case-insensitiv</span></pre>
+          </div>
+        </div>
+
+        <!-- STATISCHE PRÜFMETHODEN -->
+        <h2 class="ref-h2-section" id="ref-static">🛡️ Statische Prüf-Methoden</h2>
+        <div class="ref-grid">
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">string.IsNullOrEmpty(s)</span><span class="ref-tag ref-tag-static">static</span><span class="ref-returns">→ bool</span></div>
+            <div class="ref-when">true wenn null ODER "" (leer). Aufruf ohne Instanz!</div>
+            <pre class="ref-pre">Console.WriteLine(string.IsNullOrEmpty(<span class="tok-str">""</span>));    <span class="tok-cmt">// True</span>
+Console.WriteLine(string.IsNullOrEmpty(<span class="tok-kw">null</span>));  <span class="tok-cmt">// True</span>
+Console.WriteLine(string.IsNullOrEmpty(<span class="tok-str">"Hi"</span>)); <span class="tok-cmt">// False</span></pre>
+          </div>
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">string.IsNullOrWhiteSpace(s)</span><span class="ref-tag ref-tag-static">static</span><span class="ref-returns">→ bool</span></div>
+            <div class="ref-when">true wenn null, "" ODER nur Leerzeichen. Sicherste Methode!</div>
+            <pre class="ref-pre">Console.WriteLine(string.IsNullOrWhiteSpace(<span class="tok-str">"   "</span>)); <span class="tok-cmt">// True</span>
+Console.WriteLine(string.IsNullOrWhiteSpace(<span class="tok-str">""</span>));    <span class="tok-cmt">// True</span>
+Console.WriteLine(string.IsNullOrWhiteSpace(<span class="tok-kw">null</span>));  <span class="tok-cmt">// True</span></pre>
+          </div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-method-head"><span class="ref-method-name">String.Empty</span><span class="ref-tag ref-tag-prop">Feld</span><span class="ref-returns">→ string</span></div>
+          <div class="ref-when">Leerstring-Initialisierung — bevorzugt gegenüber "".</div>
+          <pre class="ref-pre"><span class="tok-type">string</span> s = String.Empty;  <span class="tok-cmt">// entspricht ""</span>
+<span class="tok-type">string</span> s2 = <span class="tok-str">""</span>;           <span class="tok-cmt">// auch gültig</span></pre>
+        </div>
+
+        <!-- EXCEPTION HANDLING -->
+        <hr class="ref-divider" id="ref-exceptions">
+        <h2 class="ref-h2-section">🚨 Exception Handling (try-catch-finally)</h2>
+
+        <div class="ref-section">
+          <p class="ref-prose">Eine Exception ist ein Programmzustand der zu einem Fehler führt. Mit try-catch fängst du ihn ab statt das Programm abstürzen zu lassen.</p>
+          <pre class="ref-pre"><span class="tok-kw">try</span>
+{
+    <span class="tok-cmt">// Code der einen Fehler werfen könnte</span>
+}
+<span class="tok-kw">catch</span> (Exception ex)
+{
+    Console.WriteLine(<span class="tok-str">"Fehler: "</span> + ex.Message);
+}
+<span class="tok-kw">finally</span>
+{
+    <span class="tok-cmt">// wird IMMER ausgeführt — auch bei Fehler</span>
+    <span class="tok-cmt">// typisch: Verbindungen schließen, Ressourcen freigeben</span>
+}</pre>
+        </div>
+
+        <h2 class="ref-h2-section">Die wichtigsten Exceptions für String &amp; Collections</h2>
+
+        <div class="ref-section">
+          <h3 class="ref-h3">IndexOutOfRangeException</h3>
+          <div class="ref-when">Wann: Du greifst auf einen Index zu der nicht existiert — z.B. s[10] bei Length 5.</div>
+          <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"Hi"</span>; <span class="tok-cmt">// Length = 2, Indizes: 0 und 1</span>
+<span class="tok-kw">try</span>
+{
+    <span class="tok-type">char</span> c = s[<span class="tok-num">5</span>]; <span class="tok-cmt">// ❌ IndexOutOfRangeException!</span>
+}
+<span class="tok-kw">catch</span> (IndexOutOfRangeException ex)
+{
+    Console.WriteLine(<span class="tok-str">"Index zu groß: "</span> + ex.Message);
+}
+<span class="tok-cmt">// ✅ Vorher prüfen:</span>
+<span class="tok-kw">if</span> (index >= <span class="tok-num">0</span> &amp;&amp; index &lt; s.Length)
+{
+    <span class="tok-type">char</span> c = s[index];
+}</pre>
+        </div>
+
+        <div class="ref-section">
+          <h3 class="ref-h3">ArgumentOutOfRangeException</h3>
+          <div class="ref-when">Wann: Substring, Remove, Insert mit ungültigem Index oder Länge aufgerufen.</div>
+          <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-str">"Hallo"</span>; <span class="tok-cmt">// Length = 5</span>
+<span class="tok-kw">try</span>
+{
+    <span class="tok-type">string</span> teil = s.Substring(<span class="tok-num">3</span>, <span class="tok-num">99</span>); <span class="tok-cmt">// ❌ zu lang!</span>
+}
+<span class="tok-kw">catch</span> (ArgumentOutOfRangeException ex)
+{
+    Console.WriteLine(<span class="tok-str">"Ungültiger Bereich: "</span> + ex.Message);
+}
+<span class="tok-cmt">// ✅ Sicher:</span>
+<span class="tok-kw">if</span> (start + len &lt;= s.Length)
+    <span class="tok-type">string</span> teil = s.Substring(start, len);</pre>
+        </div>
+
+        <div class="ref-section">
+          <h3 class="ref-h3">FormatException</h3>
+          <div class="ref-when">Wann: int.Parse("abc") — String kann nicht in Zahl umgewandelt werden. Lösung: TryParse!</div>
+          <pre class="ref-pre"><span class="tok-kw">try</span>
+{
+    <span class="tok-type">int</span> zahl = <span class="tok-type">int</span>.Parse(<span class="tok-str">"abc"</span>); <span class="tok-cmt">// ❌ FormatException!</span>
+}
+<span class="tok-kw">catch</span> (FormatException ex)
+{
+    Console.WriteLine(<span class="tok-str">"Keine gültige Zahl: "</span> + ex.Message);
+}
+<span class="tok-cmt">// ✅ BESSER: TryParse — kein try-catch nötig!</span>
+<span class="tok-kw">if</span> (<span class="tok-type">int</span>.TryParse(<span class="tok-str">"abc"</span>, <span class="tok-kw">out</span> <span class="tok-type">int</span> zahl))
+    Console.WriteLine(<span class="tok-str">"Zahl: "</span> + zahl);
+<span class="tok-kw">else</span>
+    Console.WriteLine(<span class="tok-str">"Keine gültige Zahl!"</span>);</pre>
+        </div>
+
+        <div class="ref-section">
+          <h3 class="ref-h3">DivideByZeroException</h3>
+          <div class="ref-when">Wann: Division durch 0 — z.B. beim Durchschnitt berechnen wenn Count == 0.</div>
+          <pre class="ref-pre"><span class="tok-kw">try</span> { <span class="tok-type">int</span> e = <span class="tok-num">10</span> / <span class="tok-num">0</span>; } <span class="tok-cmt">// ❌</span>
+<span class="tok-kw">catch</span> (DivideByZeroException)
+    Console.WriteLine(<span class="tok-str">"Division durch 0!"</span>);
+
+<span class="tok-cmt">// ✅ Vorher prüfen:</span>
+<span class="tok-kw">if</span> (liste.Count > <span class="tok-num">0</span>)
+    <span class="tok-type">double</span> schnitt = summe / liste.Count;</pre>
+        </div>
+
+        <div class="ref-section">
+          <h3 class="ref-h3">NullReferenceException</h3>
+          <div class="ref-when">Wann: Du rufst eine Methode auf einem null-String auf.</div>
+          <pre class="ref-pre"><span class="tok-type">string</span> s = <span class="tok-kw">null</span>;
+<span class="tok-kw">try</span> { <span class="tok-type">int</span> len = s.Length; } <span class="tok-cmt">// ❌ NullReferenceException!</span>
+<span class="tok-kw">catch</span> (NullReferenceException)
+    Console.WriteLine(<span class="tok-str">"String ist null!"</span>);
+
+<span class="tok-cmt">// ✅ Vorher prüfen:</span>
+<span class="tok-kw">if</span> (!string.IsNullOrWhiteSpace(s))
+    <span class="tok-type">int</span> len = s.Length;</pre>
+        </div>
+
+        <div class="ref-section">
+          <h3 class="ref-h3">ArgumentException (Dictionary)</h3>
+          <div class="ref-when">Wann: Dictionary.Add() mit einem Key der schon existiert.</div>
+          <pre class="ref-pre"><span class="tok-type">Dictionary</span>&lt;<span class="tok-type">string</span>, <span class="tok-type">int</span>&gt; d = <span class="tok-kw">new</span> <span class="tok-type">Dictionary</span>&lt;<span class="tok-type">string</span>, <span class="tok-type">int</span>&gt;();
+d.Add(<span class="tok-str">"Anna"</span>, <span class="tok-num">1</span>);
+<span class="tok-kw">try</span>
+{
+    d.Add(<span class="tok-str">"Anna"</span>, <span class="tok-num">2</span>); <span class="tok-cmt">// ❌ ArgumentException! Key existiert schon</span>
+}
+<span class="tok-kw">catch</span> (ArgumentException)
+    Console.WriteLine(<span class="tok-str">"Key existiert bereits!"</span>);
+
+<span class="tok-cmt">// ✅ ContainsKey vorher prüfen:</span>
+<span class="tok-kw">if</span> (!d.ContainsKey(<span class="tok-str">"Anna"</span>)) d.Add(<span class="tok-str">"Anna"</span>, <span class="tok-num">2</span>);
+<span class="tok-kw">else</span> d[<span class="tok-str">"Anna"</span>]++;</pre>
+        </div>
+
+        <!-- STRING TABELLE -->
+        <hr class="ref-divider" id="ref-string-table">
+        <h2 class="ref-h2-section">📋 String — Vollständigkeits-Check</h2>
+        <div class="ref-section">
+          <div class="ref-table-wrap">
+            <table class="ref-table">
+              <thead><tr><th>Methode/Eigenschaft</th><th>Rückgabe</th><th>Wichtigster Punkt</th></tr></thead>
+              <tbody>
+                <tr><td>s.Length</td><td>int</td><td>Eigenschaft, KEINE Klammern</td></tr>
+                <tr><td>s[index]</td><td>char</td><td>Nur lesen erlaubt</td></tr>
+                <tr><td>s.IndexOf()</td><td>int</td><td>Gibt -1 wenn nicht gefunden</td></tr>
+                <tr><td>s.LastIndexOf()</td><td>int</td><td>Sucht von hinten</td></tr>
+                <tr><td>s.Contains()</td><td>bool</td><td>String oder char</td></tr>
+                <tr><td>s.StartsWith()</td><td>bool</td><td>URL/Extension-Validierung</td></tr>
+                <tr><td>s.EndsWith()</td><td>bool</td><td>URL/Extension-Validierung</td></tr>
+                <tr><td>s.Substring(start)</td><td>string</td><td>Ab Index bis Ende</td></tr>
+                <tr><td>s.Substring(start, länge)</td><td>string</td><td>2. Param = LÄNGE, nicht Endindex!</td></tr>
+                <tr><td>s.ToCharArray()</td><td>char[]</td><td>Beschreibbare Kopie</td></tr>
+                <tr><td>s.Split(trennz.)</td><td>string[]</td><td>Häufigste Test-Methode</td></tr>
+                <tr><td>s.Insert(index, wert)</td><td>string</td><td>Ende: .Length, NICHT Length-1</td></tr>
+                <tr><td>s.Remove(start, n)</td><td>string</td><td>N Zeichen löschen</td></tr>
+                <tr><td>s.Replace(alt, neu)</td><td>string</td><td>Ergebnis zuweisen!</td></tr>
+                <tr><td>s.Trim()</td><td>string</td><td>Vor TryParse und Vergleichen</td></tr>
+                <tr><td>s.ToUpper() / ToLower()</td><td>string</td><td>Case-insensitive Vergleiche</td></tr>
+                <tr><td>string.IsNullOrEmpty()</td><td>bool</td><td>Statisch — über Klasse aufrufen</td></tr>
+                <tr><td>string.IsNullOrWhiteSpace()</td><td>bool</td><td>Sicherste Eingabe-Prüfung</td></tr>
+                <tr><td>String.Empty</td><td>string</td><td>Besser als ""</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="ref-section">
+          <h2 class="ref-h2" style="margin-top:0;border-bottom:none;padding-bottom:0">⚡ Exceptions auf einen Blick</h2>
+          <div class="ref-table-wrap">
+            <table class="ref-table">
+              <thead><tr><th>Exception</th><th>Auslöser</th><th>Prävention</th></tr></thead>
+              <tbody>
+                <tr><td>IndexOutOfRangeException</td><td>s[99] bei Length 5</td><td class="ref-td-ok">index &lt; s.Length prüfen</td></tr>
+                <tr><td>ArgumentOutOfRangeException</td><td>Substring/Remove zu lang</td><td class="ref-td-ok">start + len &lt;= Length prüfen</td></tr>
+                <tr><td>FormatException</td><td>int.Parse("abc")</td><td class="ref-td-ok">int.TryParse verwenden</td></tr>
+                <tr><td>DivideByZeroException</td><td>x / 0</td><td class="ref-td-ok">Count &gt; 0 prüfen</td></tr>
+                <tr><td>NullReferenceException</td><td>null.Length</td><td class="ref-td-ok">IsNullOrWhiteSpace prüfen</td></tr>
+                <tr><td>ArgumentException</td><td>Dictionary.Add doppelter Key</td><td class="ref-td-ok">ContainsKey prüfen</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- COLLECTIONS -->
+        <hr class="ref-divider" id="ref-collections">
+        <h2 class="ref-h2-section" style="color:var(--cyan)">📦 Generic Collections — System.Collections.Generic</h2>
+
+        <div class="ref-section">
+          <p class="ref-prose"><strong class="ref-strong">Warum Collections statt Arrays?</strong> Arrays haben eine <span style="color:var(--red)">fixe Größe</span>. Collections sind <span style="color:var(--green)">dynamisch</span> — sie wachsen/schrumpfen automatisch.<br><br>
+          <strong class="ref-strong">Generic &lt;T&gt;:</strong> T ist ein Platzhalter für den Datentyp. <code class="ref-code">List&lt;int&gt;</code> akzeptiert nur int — Typfehler werden beim Compilieren erkannt.</p>
+          <div class="ref-table-wrap">
+            <table class="ref-table">
+              <thead><tr><th>Collection</th><th>Prinzip</th><th>Wann verwenden?</th></tr></thead>
+              <tbody>
+                <tr><td>List&lt;T&gt;</td><td>Dynamisches Array</td><td class="ref-td-ok">Geordnete Liste, Index-Zugriff, variable Größe</td></tr>
+                <tr><td>Dictionary&lt;TK,TV&gt;</td><td>Schlüssel → Wert (Hash)</td><td class="ref-td-ok">Blitzschnelles Nachschlagen per eindeutigem Key</td></tr>
+                <tr><td>SortedList&lt;TK,TV&gt;</td><td>Wie Dictionary, aber sortiert</td><td class="ref-td-ok">Automatisch nach Key sortiert</td></tr>
+                <tr><td>Stack&lt;T&gt;</td><td style="color:var(--amber)">LIFO — Last In, First Out</td><td class="ref-td-ok">Verlauf, Rückgängig, Klammer-Check</td></tr>
+                <tr><td>Queue&lt;T&gt;</td><td style="color:var(--amber)">FIFO — First In, First Out</td><td class="ref-td-ok">Druckerwarteschlange, Ticket-System</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- LIST -->
+        <h2 class="ref-h2-section" id="ref-list">1. List&lt;T&gt; — Die dynamische Liste</h2>
+        <div class="ref-section">
+          <p class="ref-prose">Zugriff per Index wie beim Array, aber dynamisch wachsend. Statt <code class="ref-code">.Length</code> heißt es hier <code class="ref-code">.Count</code>!</p>
+          <pre class="ref-pre"><span class="tok-cmt">// Variante 1: Objekt-Initialisierer</span>
+<span class="tok-type">List</span>&lt;<span class="tok-type">int</span>&gt; liste = <span class="tok-kw">new</span> <span class="tok-type">List</span>&lt;<span class="tok-type">int</span>&gt;() { <span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">4</span>, <span class="tok-num">5</span> };
+<span class="tok-cmt">// Variante 2: Leer, dann befüllen</span>
+<span class="tok-type">List</span>&lt;<span class="tok-type">string</span>&gt; namen = <span class="tok-kw">new</span> <span class="tok-type">List</span>&lt;<span class="tok-type">string</span>&gt;();</pre>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">Add(item)</span><span class="ref-returns">→ void</span></div>
+            <div class="ref-when">Element am Ende hinzufügen.</div>
+            <pre class="ref-pre">liste.Add(<span class="tok-num">99</span>);    <span class="tok-cmt">// → [1,2,3,4,5,99]</span>
+namen.Add(<span class="tok-str">"Anna"</span>);</pre>
+          </div>
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">Insert(index, item)</span><span class="ref-returns">→ void</span></div>
+            <div class="ref-when">An einem bestimmten Index einfügen.</div>
+            <pre class="ref-pre">liste.Insert(<span class="tok-num">0</span>, <span class="tok-num">0</span>); <span class="tok-cmt">// → [0,1,2,3,4,5,99]</span></pre>
+          </div>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">Remove(item)</span><span class="ref-returns">→ bool</span></div>
+            <div class="ref-when">Erstes Vorkommen entfernen.</div>
+            <pre class="ref-pre">liste.Remove(<span class="tok-num">3</span>);  <span class="tok-cmt">// → true, entfernt 3</span>
+liste.Remove(<span class="tok-num">99</span>); <span class="tok-cmt">// → false, nicht vorhanden</span></pre>
+          </div>
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">RemoveAt(index)</span><span class="ref-returns">→ void</span></div>
+            <div class="ref-when">Element an einem bestimmten Index entfernen.</div>
+            <pre class="ref-pre">liste.RemoveAt(<span class="tok-num">0</span>); <span class="tok-cmt">// entfernt erstes Element</span>
+<span class="tok-cmt">// ❌ ArgumentOutOfRangeException wenn Index zu groß!</span></pre>
+          </div>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">Sort()</span><span class="ref-returns">→ void</span></div>
+            <pre class="ref-pre">liste.Sort();    <span class="tok-cmt">// [0,1,2,4,5,99]</span>
+namen.Sort();   <span class="tok-cmt">// alphabetisch</span></pre>
+          </div>
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">Contains / IndexOf / Count</span></div>
+            <pre class="ref-pre">liste.Contains(<span class="tok-num">5</span>);  <span class="tok-cmt">// → true/false</span>
+liste.IndexOf(<span class="tok-num">5</span>);   <span class="tok-cmt">// → Index oder -1</span>
+Console.WriteLine(liste.Count);</pre>
+          </div>
+        </div>
+        <div class="ref-section">
+          <h3 class="ref-h3">foreach — Standard-Iteration</h3>
+          <pre class="ref-pre"><span class="tok-kw">foreach</span> (<span class="tok-type">string</span> name <span class="tok-kw">in</span> namen)
+    Console.WriteLine(name);
+
+<span class="tok-cmt">// Mit Index (for-Schleife):</span>
+<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; liste.Count; i++)
+    Console.WriteLine(i + <span class="tok-str">": "</span> + liste[i]);</pre>
+        </div>
+
+        <!-- DICTIONARY -->
+        <h2 class="ref-h2-section" id="ref-dict">2. Dictionary&lt;TKey, TValue&gt;</h2>
+        <div class="ref-section">
+          <p class="ref-prose">Blitzschneller Key-Value-Lookup. Jeder Key ist einzigartig. Reihenfolge ist nicht garantiert!</p>
+          <pre class="ref-pre"><span class="tok-type">Dictionary</span>&lt;<span class="tok-type">int</span>, <span class="tok-type">string</span>&gt; dict = <span class="tok-kw">new</span> <span class="tok-type">Dictionary</span>&lt;<span class="tok-type">int</span>, <span class="tok-type">string</span>&gt;()
+{
+    { <span class="tok-num">1</span>, <span class="tok-str">"Huber"</span> },
+    { <span class="tok-num">2</span>, <span class="tok-str">"Mayer"</span> },
+    { <span class="tok-num">3</span>, <span class="tok-str">"Wimmer"</span> }
+};</pre>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">Add(key, value)</span><span class="ref-returns">→ void</span></div>
+            <pre class="ref-pre">dict.Add(<span class="tok-num">4</span>, <span class="tok-str">"Schmidt"</span>);
+<span class="tok-cmt">// ❌ ArgumentException wenn Key schon da!</span>
+<span class="tok-kw">if</span> (!dict.ContainsKey(<span class="tok-num">4</span>))
+    dict.Add(<span class="tok-num">4</span>, <span class="tok-str">"Schmidt"</span>);</pre>
+          </div>
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">TryGetValue(key, out val)</span><span class="ref-returns">→ bool</span></div>
+            <div class="ref-when">Sicherer Zugriff ohne Exception bei fehlendem Key!</div>
+            <pre class="ref-pre"><span class="tok-kw">if</span> (dict.TryGetValue(<span class="tok-num">1</span>, <span class="tok-kw">out</span> <span class="tok-type">string</span> name))
+    Console.WriteLine(name); <span class="tok-cmt">// → "Huber"</span>
+<span class="tok-kw">else</span>
+    Console.WriteLine(<span class="tok-str">"Key nicht gefunden"</span>);</pre>
+          </div>
+        </div>
+        <div class="ref-section">
+          <h3 class="ref-h3">foreach mit KeyValuePair</h3>
+          <pre class="ref-pre"><span class="tok-kw">foreach</span> (KeyValuePair&lt;<span class="tok-type">int</span>, <span class="tok-type">string</span>&gt; eintrag <span class="tok-kw">in</span> dict)
+    Console.WriteLine(eintrag.Key + <span class="tok-str">" → "</span> + eintrag.Value);
+
+<span class="tok-cmt">// Kurz mit var:</span>
+<span class="tok-kw">foreach</span> (<span class="tok-kw">var</span> e <span class="tok-kw">in</span> dict)
+    Console.WriteLine(e.Key + <span class="tok-str">" → "</span> + e.Value);</pre>
+        </div>
+
+        <!-- SORTEDLIST -->
+        <h2 class="ref-h2-section" id="ref-sortedlist">3. SortedList&lt;TKey, TValue&gt;</h2>
+        <div class="ref-section">
+          <p class="ref-prose">Wie Dictionary, aber Einträge werden automatisch nach Key sortiert gehalten. Alle Dict-Methoden gelten auch hier, plus <code class="ref-code">IndexOfKey()</code> und <code class="ref-code">RemoveAt(index)</code>.</p>
+          <pre class="ref-pre"><span class="tok-type">SortedList</span>&lt;<span class="tok-type">int</span>, <span class="tok-type">string</span>&gt; sl = <span class="tok-kw">new</span> <span class="tok-type">SortedList</span>&lt;<span class="tok-type">int</span>, <span class="tok-type">string</span>&gt;();
+sl.Add(<span class="tok-num">3</span>, <span class="tok-str">"C"</span>); sl.Add(<span class="tok-num">1</span>, <span class="tok-str">"A"</span>); sl.Add(<span class="tok-num">2</span>, <span class="tok-str">"B"</span>);
+<span class="tok-cmt">// Automatisch sortiert: {1:A, 2:B, 3:C}</span>
+
+<span class="tok-type">int</span> idx = sl.IndexOfKey(<span class="tok-num">2</span>); <span class="tok-cmt">// → 1</span>
+sl.RemoveAt(<span class="tok-num">0</span>);             <span class="tok-cmt">// entfernt Key 1 ("A")</span></pre>
+        </div>
+
+        <!-- STACK -->
+        <h2 class="ref-h2-section" id="ref-stack">4. Stack&lt;T&gt; — LIFO: Last In, First Out</h2>
+        <div class="ref-section">
+          <p class="ref-prose">Wie ein Stapel Teller: Das zuletzt Abgelegte wird zuerst genommen. Pushing = drauflegen, Popping = wegnehmen.</p>
+          <pre class="ref-pre"><span class="tok-type">Stack</span>&lt;<span class="tok-type">string</span>&gt; verlauf = <span class="tok-kw">new</span> <span class="tok-type">Stack</span>&lt;<span class="tok-type">string</span>&gt;();</pre>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">Push(item)</span><span class="ref-returns">→ void</span></div>
+            <div class="ref-when">Element oben drauflegen.</div>
+            <pre class="ref-pre">verlauf.Push(<span class="tok-str">"Seite1"</span>);
+verlauf.Push(<span class="tok-str">"Seite2"</span>);
+verlauf.Push(<span class="tok-str">"Seite3"</span>);</pre>
+          </div>
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">Pop()</span><span class="ref-returns">→ T</span></div>
+            <div class="ref-when">Oberstes Element holen UND entfernen. Exception wenn leer!</div>
+            <pre class="ref-pre"><span class="tok-kw">if</span> (verlauf.Count > <span class="tok-num">0</span>)
+    Console.WriteLine(verlauf.Pop());
+<span class="tok-cmt">// → "Seite3"</span></pre>
+          </div>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">Peek()</span><span class="ref-returns">→ T</span></div>
+            <div class="ref-when">Oberstes Element NUR ansehen — NICHT entfernen.</div>
+            <pre class="ref-pre"><span class="tok-kw">if</span> (verlauf.Count > <span class="tok-num">0</span>)
+    Console.WriteLine(verlauf.Peek());
+<span class="tok-cmt">// → "Seite2" (bleibt da)</span></pre>
+          </div>
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">while-Schleife</span></div>
+            <pre class="ref-pre"><span class="tok-kw">while</span> (verlauf.Count > <span class="tok-num">0</span>)
+{
+    Console.WriteLine(verlauf.Pop());
+}
+<span class="tok-cmt">// → Seite2, Seite1 (LIFO!)</span></pre>
+          </div>
+        </div>
+        <div class="ref-section">
+          <h3 class="ref-h3">InvalidOperationException — Stack leer</h3>
+          <div class="ref-when">Wann: Pop() oder Peek() auf leerem Stack aufgerufen.</div>
+          <pre class="ref-pre"><span class="tok-type">Stack</span>&lt;<span class="tok-type">int</span>&gt; s = <span class="tok-kw">new</span> <span class="tok-type">Stack</span>&lt;<span class="tok-type">int</span>&gt;();
+<span class="tok-kw">try</span>
+{
+    <span class="tok-type">int</span> x = s.Pop(); <span class="tok-cmt">// ❌ InvalidOperationException!</span>
+}
+<span class="tok-kw">catch</span> (InvalidOperationException)
+    Console.WriteLine(<span class="tok-str">"Stack ist leer!"</span>);
+
+<span class="tok-cmt">// ✅ Vorher prüfen:</span>
+<span class="tok-kw">if</span> (s.Count > <span class="tok-num">0</span>) Console.WriteLine(s.Pop());</pre>
+        </div>
+
+        <!-- QUEUE -->
+        <h2 class="ref-h2-section" id="ref-queue">5. Queue&lt;T&gt; — FIFO: First In, First Out</h2>
+        <div class="ref-section">
+          <p class="ref-prose">Wie eine Warteschlange beim Arzt: Wer zuerst kommt, wird zuerst verarbeitet. Hinten rein, vorne raus.</p>
+          <pre class="ref-pre"><span class="tok-type">Queue</span>&lt;<span class="tok-type">string</span>&gt; drucker = <span class="tok-kw">new</span> <span class="tok-type">Queue</span>&lt;<span class="tok-type">string</span>&gt;();</pre>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">Enqueue(item)</span><span class="ref-returns">→ void</span></div>
+            <div class="ref-when">Element hinten einreihen.</div>
+            <pre class="ref-pre">drucker.Enqueue(<span class="tok-str">"Dokument_A.pdf"</span>);
+drucker.Enqueue(<span class="tok-str">"Dokument_B.pdf"</span>);
+drucker.Enqueue(<span class="tok-str">"Dokument_C.pdf"</span>);</pre>
+          </div>
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">Dequeue()</span><span class="ref-returns">→ T</span></div>
+            <div class="ref-when">Vorderstes Element holen UND entfernen. Exception wenn leer!</div>
+            <pre class="ref-pre"><span class="tok-kw">if</span> (drucker.Count > <span class="tok-num">0</span>)
+    Console.WriteLine(drucker.Dequeue());
+<span class="tok-cmt">// → "Dokument_A.pdf"</span></pre>
+          </div>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">Peek()</span><span class="ref-returns">→ T</span></div>
+            <div class="ref-when">Vorderstes Element NUR ansehen — NICHT entfernen.</div>
+            <pre class="ref-pre"><span class="tok-kw">if</span> (drucker.Count > <span class="tok-num">0</span>)
+    Console.WriteLine(drucker.Peek());
+<span class="tok-cmt">// → "Dokument_B.pdf" (bleibt da)</span></pre>
+          </div>
+          <div class="ref-section">
+            <div class="ref-method-head"><span class="ref-method-name">while-Verarbeitungsschleife</span></div>
+            <pre class="ref-pre"><span class="tok-kw">while</span> (drucker.Count > <span class="tok-num">0</span>)
+{
+    Console.Write(drucker.Dequeue() + <span class="tok-str">" "</span>);
+}
+<span class="tok-cmt">// → A B C (FIFO!)</span></pre>
+          </div>
+        </div>
+
+        <!-- COLLECTIONS TABELLE -->
+        <hr class="ref-divider" id="ref-coll-table">
+        <h2 class="ref-h2-section">📋 Collections — Vollständigkeits-Check</h2>
+        <div class="ref-section">
+          <div class="ref-table-wrap">
+            <table class="ref-table ref-table-coll">
+              <thead>
+                <tr><th>Methode</th><th>List</th><th>Dictionary</th><th>SortedList</th><th>Stack</th><th>Queue</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Count</td><td class="ref-td-ok">✅</td><td class="ref-td-ok">✅</td><td class="ref-td-ok">✅</td><td class="ref-td-ok">✅</td><td class="ref-td-ok">✅</td></tr>
+                <tr><td>Add</td><td class="ref-td-ok">✅</td><td class="ref-td-ok">✅ (key,val)</td><td class="ref-td-ok">✅ (key,val)</td><td>Push()</td><td>Enqueue()</td></tr>
+                <tr><td>Remove</td><td class="ref-td-ok">✅ (item)</td><td class="ref-td-ok">✅ (key)</td><td class="ref-td-ok">✅ (key)</td><td>Pop()</td><td>Dequeue()</td></tr>
+                <tr><td>RemoveAt(index)</td><td class="ref-td-ok">✅</td><td class="ref-td-err">❌</td><td class="ref-td-ok">✅</td><td class="ref-td-err">❌</td><td class="ref-td-err">❌</td></tr>
+                <tr><td>Contains</td><td class="ref-td-ok">✅ (item)</td><td>ContainsKey / ContainsValue</td><td>ContainsKey / ContainsValue</td><td class="ref-td-err">❌</td><td class="ref-td-err">❌</td></tr>
+                <tr><td>TryGetValue</td><td class="ref-td-err">❌</td><td class="ref-td-ok">✅</td><td class="ref-td-ok">✅</td><td class="ref-td-err">❌</td><td class="ref-td-err">❌</td></tr>
+                <tr><td>Peek (ansehen)</td><td class="ref-td-err">❌</td><td class="ref-td-err">❌</td><td class="ref-td-err">❌</td><td class="ref-td-ok">✅ oben</td><td class="ref-td-ok">✅ vorne</td></tr>
+                <tr><td>IndexOf</td><td class="ref-td-ok">✅ (item)</td><td class="ref-td-err">❌</td><td>IndexOfKey / IndexOfValue</td><td class="ref-td-err">❌</td><td class="ref-td-err">❌</td></tr>
+                <tr><td>Sort()</td><td class="ref-td-ok">✅</td><td class="ref-td-err">❌</td><td>automatisch!</td><td class="ref-td-err">❌</td><td class="ref-td-err">❌</td></tr>
+                <tr><td>Clear()</td><td class="ref-td-ok">✅</td><td class="ref-td-ok">✅</td><td class="ref-td-ok">✅</td><td class="ref-td-ok">✅</td><td class="ref-td-ok">✅</td></tr>
+                <tr><td>ToArray()</td><td class="ref-td-ok">✅</td><td class="ref-td-err">❌</td><td class="ref-td-err">❌</td><td class="ref-td-ok">✅ oben→unten</td><td class="ref-td-ok">✅ vorne→hinten</td></tr>
+                <tr><td>foreach</td><td class="ref-td-ok">direkt</td><td>KeyValuePair</td><td>KeyValuePair</td><td class="ref-td-ok">direkt</td><td class="ref-td-ok">direkt</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <p class="ref-footer">HTL POS1 — Strings, Collections &amp; Exceptions | Viel Erfolg beim Test! 🍀</p>
+
+      </div><!-- /ref-content -->
+    </div><!-- /ref-layout -->
+    <div class="bottom-nav-spacer"></div>
+  </div><!-- /tab-referenz -->
+
+  <!-- ═══════════════════════════════════════════════
        TAB: EXERCISES
   ═══════════════════════════════════════════════ -->
   <div id="tab-exercises" class="tab-content">
@@ -188,8 +869,8 @@ function switchTab(id, btn) {
   btn.classList.add('active');
   // sync bottom nav
   document.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
-  const bnavId = id === 'simulator' ? 'bnav-sim' : 'bnav-ex';
-  const bnavEl = document.getElementById(bnavId);
+  const bnavMap = { simulator: 'bnav-sim', exercises: 'bnav-ex', referenz: 'bnav-ref' };
+  const bnavEl = document.getElementById(bnavMap[id]);
   if (bnavEl) bnavEl.classList.add('active');
 }
 
@@ -200,10 +881,10 @@ function switchTabMobile(id, btn) {
   btn.classList.add('active');
   // sync header tabs
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  const headerTabIdx = id === 'simulator' ? 0 : 1;
+  const headerTabMap = { simulator: 0, exercises: 1, referenz: 2 };
   const headerTabs = document.querySelectorAll('.tab-btn');
-  if (headerTabs[headerTabIdx]) headerTabs[headerTabIdx].classList.add('active');
-  // scroll to top on tab switch
+  const idx = headerTabMap[id];
+  if (headerTabs[idx]) headerTabs[idx].classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -907,11 +1588,6 @@ function showExercise(id, el) {
 
   const detail = document.getElementById('ex-detail');
 
-  // On mobile, scroll detail into view after render
-  if (window.innerWidth < 768) {
-    setTimeout(() => detail.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
-  }
-
   const reqItems = ex.requirements.map(r => `<li>${escHtml(r)}</li>`).join('');
   const structTags = ex.structures.map(s => `<span class="struct-tag">${escHtml(s)}</span>`).join(' ');
 
@@ -961,11 +1637,11 @@ function toggleSolution(btn) {
   btn.classList.toggle('open');
   const body = btn.nextElementSibling;
   body.classList.toggle('open');
-  const isOpen = btn.classList.contains('open');
-  const textNode = btn.firstChild;
-  if (textNode && textNode.nodeType === Node.TEXT_NODE) {
-    textNode.textContent = isOpen ? '🔓 Lösung verbergen ' : '🔒 Lösung anzeigen ';
-  }
+  btn.textContent = btn.classList.contains('open') ? '🔓 Lösung verbergen ' : '🔒 Lösung anzeigen ';
+  const icon = document.createElement('span');
+  icon.className = 'toggle-icon';
+  icon.textContent = '▼';
+  btn.appendChild(icon);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1014,8 +1690,39 @@ function escHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+/* ═══════════════════════════════════════════════════════════
+   REFERENZ SCROLL SPY
+═══════════════════════════════════════════════════════════ */
+function initRefScrollSpy() {
+  const content = document.querySelector('.ref-content');
+  if (!content) return;
+  const links = document.querySelectorAll('.ref-navlink');
+  const sections = document.querySelectorAll('.ref-content [id]');
+
+  content.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (sec.offsetTop - 80 <= content.scrollTop) current = sec.id;
+    });
+    links.forEach(l => {
+      l.classList.remove('active');
+      if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+    });
+  });
+
+  // Override anchor clicks to scroll inside .ref-content
+  links.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+}
+
 /* ── Boot ── */
 loadData();
+initRefScrollSpy();
 </script>
 </body>
 </html>
