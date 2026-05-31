@@ -16,7 +16,12 @@
         "IndexOf": {
           "label": "IndexOf(string)",
           "params": [
-            { "name": "value", "label": "Suchwert", "type": "string", "placeholder": "Welt" }
+            {
+              "name": "value",
+              "label": "Suchwert",
+              "type": "string",
+              "placeholder": "Welt"
+            }
           ],
           "description": "Gibt den Index des ersten Vorkommens zurück, oder -1 wenn nicht gefunden.",
           "signature": "public int IndexOf(string value)",
@@ -25,7 +30,12 @@
         "LastIndexOf": {
           "label": "LastIndexOf(string)",
           "params": [
-            { "name": "value", "label": "Suchwert", "type": "string", "placeholder": "l" }
+            {
+              "name": "value",
+              "label": "Suchwert",
+              "type": "string",
+              "placeholder": "l"
+            }
           ],
           "description": "Gibt den Index des letzten Vorkommens zurück, oder -1.",
           "signature": "public int LastIndexOf(string value)",
@@ -34,7 +44,12 @@
         "Substring1": {
           "label": "Substring(startIndex)",
           "params": [
-            { "name": "startIndex", "label": "startIndex", "type": "int", "placeholder": "6" }
+            {
+              "name": "startIndex",
+              "label": "startIndex",
+              "type": "int",
+              "placeholder": "6"
+            }
           ],
           "description": "Gibt Teilzeichenfolge ab startIndex bis zum Ende zurück.",
           "signature": "public string Substring(int startIndex)",
@@ -43,8 +58,18 @@
         "Substring2": {
           "label": "Substring(startIndex, length)",
           "params": [
-            { "name": "startIndex", "label": "startIndex", "type": "int", "placeholder": "0" },
-            { "name": "length", "label": "length", "type": "int", "placeholder": "5" }
+            {
+              "name": "startIndex",
+              "label": "startIndex",
+              "type": "int",
+              "placeholder": "0"
+            },
+            {
+              "name": "length",
+              "label": "length",
+              "type": "int",
+              "placeholder": "5"
+            }
           ],
           "description": "Gibt Teilzeichenfolge ab startIndex mit der angegebenen Länge zurück.",
           "signature": "public string Substring(int startIndex, int length)",
@@ -53,8 +78,18 @@
         "Replace_SS": {
           "label": "Replace(string, string)",
           "params": [
-            { "name": "oldValue", "label": "oldValue", "type": "string", "placeholder": "Welt" },
-            { "name": "newValue", "label": "newValue", "type": "string", "placeholder": "C#" }
+            {
+              "name": "oldValue",
+              "label": "oldValue",
+              "type": "string",
+              "placeholder": "Welt"
+            },
+            {
+              "name": "newValue",
+              "label": "newValue",
+              "type": "string",
+              "placeholder": "C#"
+            }
           ],
           "description": "Ersetzt alle Vorkommen von oldValue durch newValue.",
           "signature": "public string Replace(string oldValue, string newValue)",
@@ -63,8 +98,18 @@
         "Replace_CC": {
           "label": "Replace(char, char)",
           "params": [
-            { "name": "oldChar", "label": "oldChar (1 Zeichen)", "type": "char", "placeholder": "l" },
-            { "name": "newChar", "label": "newChar (1 Zeichen)", "type": "char", "placeholder": "L" }
+            {
+              "name": "oldChar",
+              "label": "oldChar (1 Zeichen)",
+              "type": "char",
+              "placeholder": "l"
+            },
+            {
+              "name": "newChar",
+              "label": "newChar (1 Zeichen)",
+              "type": "char",
+              "placeholder": "L"
+            }
           ],
           "description": "Ersetzt alle Vorkommen eines Zeichens durch ein anderes.",
           "signature": "public string Replace(char oldChar, char newChar)",
@@ -73,7 +118,12 @@
         "Split": {
           "label": "Split(char[])",
           "params": [
-            { "name": "separator", "label": "Trennzeichen", "type": "char", "placeholder": " " }
+            {
+              "name": "separator",
+              "label": "Trennzeichen",
+              "type": "char",
+              "placeholder": " "
+            }
           ],
           "description": "Unterteilt den String an den Trennzeichen und gibt ein string[] zurück.",
           "signature": "public string[] Split(params char[]? separator)",
@@ -82,7 +132,12 @@
         "Contains_S": {
           "label": "Contains(string)",
           "params": [
-            { "name": "value", "label": "Suchwert", "type": "string", "placeholder": "Welt" }
+            {
+              "name": "value",
+              "label": "Suchwert",
+              "type": "string",
+              "placeholder": "Welt"
+            }
           ],
           "description": "Gibt true zurück wenn der Teilstring enthalten ist.",
           "signature": "public bool Contains(string value)",
@@ -91,8 +146,18 @@
         "Insert": {
           "label": "Insert(startIndex, string)",
           "params": [
-            { "name": "startIndex", "label": "startIndex", "type": "int", "placeholder": "5" },
-            { "name": "value", "label": "Einzufügender Text", "type": "string", "placeholder": "," }
+            {
+              "name": "startIndex",
+              "label": "startIndex",
+              "type": "int",
+              "placeholder": "5"
+            },
+            {
+              "name": "value",
+              "label": "Einzufügender Text",
+              "type": "string",
+              "placeholder": ","
+            }
           ],
           "description": "Gibt neuen String zurück mit eingefügtem Text an der Position.",
           "signature": "public string Insert(int startIndex, string value)",
@@ -101,8 +166,18 @@
         "Remove": {
           "label": "Remove(startIndex, count)",
           "params": [
-            { "name": "startIndex", "label": "startIndex", "type": "int", "placeholder": "5" },
-            { "name": "count", "label": "count (Anzahl Zeichen)", "type": "int", "placeholder": "5" }
+            {
+              "name": "startIndex",
+              "label": "startIndex",
+              "type": "int",
+              "placeholder": "5"
+            },
+            {
+              "name": "count",
+              "label": "count (Anzahl Zeichen)",
+              "type": "int",
+              "placeholder": "5"
+            }
           ],
           "description": "Löscht 'count' Zeichen ab startIndex und gibt neuen String zurück.",
           "signature": "public string Remove(int startIndex, int count)",
@@ -155,13 +230,22 @@
     "List": {
       "label": "List<string>",
       "description": "Typisierte, dynamisch wachsende Liste. Zugriff über Index. Namespace: System.Collections.Generic.",
-      "initialItems": ["Apfel", "Banane", "Kirsche"],
+      "initialItems": [
+        "Apfel",
+        "Banane",
+        "Kirsche"
+      ],
       "visualType": "list",
       "methods": {
         "Add": {
           "label": "Add(T)",
           "params": [
-            { "name": "item", "label": "Element", "type": "string", "placeholder": "Mango" }
+            {
+              "name": "item",
+              "label": "Element",
+              "type": "string",
+              "placeholder": "Mango"
+            }
           ],
           "description": "Fügt am Ende der Liste ein Element hinzu.",
           "signature": "public void Add(T item)",
@@ -170,8 +254,18 @@
         "Insert": {
           "label": "Insert(index, T)",
           "params": [
-            { "name": "index", "label": "Index", "type": "int", "placeholder": "1" },
-            { "name": "item", "label": "Element", "type": "string", "placeholder": "Pflaume" }
+            {
+              "name": "index",
+              "label": "Index",
+              "type": "int",
+              "placeholder": "1"
+            },
+            {
+              "name": "item",
+              "label": "Element",
+              "type": "string",
+              "placeholder": "Pflaume"
+            }
           ],
           "description": "Fügt am angegebenen Index ein Element ein.",
           "signature": "public void Insert(int index, T item)",
@@ -180,7 +274,12 @@
         "Remove": {
           "label": "Remove(T)",
           "params": [
-            { "name": "item", "label": "Element", "type": "string", "placeholder": "Banane" }
+            {
+              "name": "item",
+              "label": "Element",
+              "type": "string",
+              "placeholder": "Banane"
+            }
           ],
           "description": "Entfernt das erste Vorkommen des Elements. Gibt true zurück bei Erfolg.",
           "signature": "public bool Remove(T item)",
@@ -189,7 +288,12 @@
         "RemoveAt": {
           "label": "RemoveAt(index)",
           "params": [
-            { "name": "index", "label": "Index", "type": "int", "placeholder": "0" }
+            {
+              "name": "index",
+              "label": "Index",
+              "type": "int",
+              "placeholder": "0"
+            }
           ],
           "description": "Entfernt das Element am angegebenen Index.",
           "signature": "public void RemoveAt(int index)",
@@ -198,7 +302,12 @@
         "Contains": {
           "label": "Contains(T)",
           "params": [
-            { "name": "item", "label": "Element", "type": "string", "placeholder": "Apfel" }
+            {
+              "name": "item",
+              "label": "Element",
+              "type": "string",
+              "placeholder": "Apfel"
+            }
           ],
           "description": "Gibt true zurück wenn das Element in der Liste vorhanden ist.",
           "signature": "public bool Contains(T item)",
@@ -207,7 +316,12 @@
         "IndexOf": {
           "label": "IndexOf(T)",
           "params": [
-            { "name": "item", "label": "Element", "type": "string", "placeholder": "Banane" }
+            {
+              "name": "item",
+              "label": "Element",
+              "type": "string",
+              "placeholder": "Banane"
+            }
           ],
           "description": "Gibt den nullbasierten Index des ersten Vorkommens zurück, oder -1.",
           "signature": "public int IndexOf(T item)",
@@ -253,13 +367,22 @@
     "Stack": {
       "label": "Stack<string>",
       "description": "LIFO-Sammlung (Last-In-First-Out). Pushing fügt oben ein, Popping entfernt oben. Namespace: System.Collections.Generic.",
-      "initialItems": ["Seite 1", "Seite 2", "Seite 3"],
+      "initialItems": [
+        "Seite 1",
+        "Seite 2",
+        "Seite 3"
+      ],
       "visualType": "stack",
       "methods": {
         "Push": {
           "label": "Push(T)",
           "params": [
-            { "name": "item", "label": "Element", "type": "string", "placeholder": "Seite 4" }
+            {
+              "name": "item",
+              "label": "Element",
+              "type": "string",
+              "placeholder": "Seite 4"
+            }
           ],
           "description": "Fügt ein Element oben auf den Stack (pushing).",
           "signature": "public void Push(T item)",
@@ -282,7 +405,12 @@
         "Contains": {
           "label": "Contains(T)",
           "params": [
-            { "name": "item", "label": "Element", "type": "string", "placeholder": "Seite 1" }
+            {
+              "name": "item",
+              "label": "Element",
+              "type": "string",
+              "placeholder": "Seite 1"
+            }
           ],
           "description": "Gibt true zurück wenn das Element im Stack vorhanden ist.",
           "signature": "public bool Contains(T item)",
@@ -307,13 +435,22 @@
     "Queue": {
       "label": "Queue<string>",
       "description": "FIFO-Sammlung (First-In-First-Out). Enqueue fügt hinten ein, Dequeue entfernt vorne. Namespace: System.Collections.Generic.",
-      "initialItems": ["Aufgabe A", "Aufgabe B", "Aufgabe C"],
+      "initialItems": [
+        "Aufgabe A",
+        "Aufgabe B",
+        "Aufgabe C"
+      ],
       "visualType": "queue",
       "methods": {
         "Enqueue": {
           "label": "Enqueue(T)",
           "params": [
-            { "name": "item", "label": "Element", "type": "string", "placeholder": "Aufgabe D" }
+            {
+              "name": "item",
+              "label": "Element",
+              "type": "string",
+              "placeholder": "Aufgabe D"
+            }
           ],
           "description": "Fügt am Ende der Queue ein Element hinzu (enqueue).",
           "signature": "public void Enqueue(T item)",
@@ -336,7 +473,12 @@
         "Contains": {
           "label": "Contains(T)",
           "params": [
-            { "name": "item", "label": "Element", "type": "string", "placeholder": "Aufgabe A" }
+            {
+              "name": "item",
+              "label": "Element",
+              "type": "string",
+              "placeholder": "Aufgabe A"
+            }
           ],
           "description": "Gibt true zurück wenn das Element in der Queue vorhanden ist.",
           "signature": "public bool Contains(T item)",
@@ -362,17 +504,36 @@
       "label": "Dictionary<int, string>",
       "description": "Eindeutige Schlüssel-Wert-Paare. O(1)-Zugriff per Key. Reihenfolge nicht garantiert. Namespace: System.Collections.Generic.",
       "initialItems": [
-        { "key": 1, "value": "Huber" },
-        { "key": 2, "value": "Mayer" },
-        { "key": 3, "value": "Wimmer" }
+        {
+          "key": 1,
+          "value": "Huber"
+        },
+        {
+          "key": 2,
+          "value": "Mayer"
+        },
+        {
+          "key": 3,
+          "value": "Wimmer"
+        }
       ],
       "visualType": "dictionary",
       "methods": {
         "Add": {
           "label": "Add(TKey, TValue)",
           "params": [
-            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "4" },
-            { "name": "value", "label": "Value (string)", "type": "string", "placeholder": "Schmidt" }
+            {
+              "name": "key",
+              "label": "Key (int)",
+              "type": "int",
+              "placeholder": "4"
+            },
+            {
+              "name": "value",
+              "label": "Value (string)",
+              "type": "string",
+              "placeholder": "Schmidt"
+            }
           ],
           "description": "Fügt Schlüssel-Wert-Paar hinzu. Wirft ArgumentException wenn Key bereits existiert.",
           "signature": "public void Add(TKey key, TValue value)",
@@ -381,7 +542,12 @@
         "Remove": {
           "label": "Remove(TKey)",
           "params": [
-            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "2" }
+            {
+              "name": "key",
+              "label": "Key (int)",
+              "type": "int",
+              "placeholder": "2"
+            }
           ],
           "description": "Entfernt den Eintrag mit dem angegebenen Key.",
           "signature": "public bool Remove(TKey key)",
@@ -390,7 +556,12 @@
         "ContainsKey": {
           "label": "ContainsKey(TKey)",
           "params": [
-            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "1" }
+            {
+              "name": "key",
+              "label": "Key (int)",
+              "type": "int",
+              "placeholder": "1"
+            }
           ],
           "description": "Gibt true zurück wenn der Key im Dictionary vorhanden ist.",
           "signature": "public bool ContainsKey(TKey key)",
@@ -399,7 +570,12 @@
         "ContainsValue": {
           "label": "ContainsValue(TValue)",
           "params": [
-            { "name": "value", "label": "Value (string)", "type": "string", "placeholder": "Mayer" }
+            {
+              "name": "value",
+              "label": "Value (string)",
+              "type": "string",
+              "placeholder": "Mayer"
+            }
           ],
           "description": "Gibt true zurück wenn der Wert im Dictionary vorhanden ist.",
           "signature": "public bool ContainsValue(TValue value)",
@@ -408,7 +584,12 @@
         "TryGetValue": {
           "label": "TryGetValue(TKey, out TValue)",
           "params": [
-            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "1" }
+            {
+              "name": "key",
+              "label": "Key (int)",
+              "type": "int",
+              "placeholder": "1"
+            }
           ],
           "description": "Versucht den Wert abzurufen. Gibt true zurück wenn erfolgreich, ohne Exception bei fehlendem Key.",
           "signature": "public bool TryGetValue(TKey key, out TValue value)",
@@ -434,17 +615,36 @@
       "label": "SortedList<int, string>",
       "description": "Schlüssel-Wert-Paare, die automatisch nach Schlüssel sortiert bleiben. Namespace: System.Collections.Generic.",
       "initialItems": [
-        { "key": 3, "value": "Zebra" },
-        { "key": 1, "value": "Apfel" },
-        { "key": 2, "value": "Mango" }
+        {
+          "key": 3,
+          "value": "Zebra"
+        },
+        {
+          "key": 1,
+          "value": "Apfel"
+        },
+        {
+          "key": 2,
+          "value": "Mango"
+        }
       ],
       "visualType": "dictionary",
       "methods": {
         "Add": {
           "label": "Add(TKey, TValue)",
           "params": [
-            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "4" },
-            { "name": "value", "label": "Value (string)", "type": "string", "placeholder": "Birne" }
+            {
+              "name": "key",
+              "label": "Key (int)",
+              "type": "int",
+              "placeholder": "4"
+            },
+            {
+              "name": "value",
+              "label": "Value (string)",
+              "type": "string",
+              "placeholder": "Birne"
+            }
           ],
           "description": "Fügt Schlüssel-Wert-Paar hinzu. Liste bleibt automatisch sortiert. Wirft ArgumentException bei doppeltem Key.",
           "signature": "public void Add(TKey key, TValue value)",
@@ -453,7 +653,12 @@
         "Remove": {
           "label": "Remove(TKey)",
           "params": [
-            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "2" }
+            {
+              "name": "key",
+              "label": "Key (int)",
+              "type": "int",
+              "placeholder": "2"
+            }
           ],
           "description": "Entfernt den Eintrag mit dem angegebenen Schlüssel.",
           "signature": "public bool Remove(TKey key)",
@@ -462,7 +667,12 @@
         "RemoveAt": {
           "label": "RemoveAt(index)",
           "params": [
-            { "name": "index", "label": "Index (Position)", "type": "int", "placeholder": "0" }
+            {
+              "name": "index",
+              "label": "Index (Position)",
+              "type": "int",
+              "placeholder": "0"
+            }
           ],
           "description": "Entfernt den Eintrag an der angegebenen Indexposition.",
           "signature": "public void RemoveAt(int index)",
@@ -471,7 +681,12 @@
         "ContainsKey": {
           "label": "ContainsKey(TKey)",
           "params": [
-            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "1" }
+            {
+              "name": "key",
+              "label": "Key (int)",
+              "type": "int",
+              "placeholder": "1"
+            }
           ],
           "description": "Gibt true zurück wenn der Schlüssel vorhanden ist.",
           "signature": "public bool ContainsKey(TKey key)",
@@ -480,7 +695,12 @@
         "ContainsValue": {
           "label": "ContainsValue(TValue)",
           "params": [
-            { "name": "value", "label": "Value (string)", "type": "string", "placeholder": "Apfel" }
+            {
+              "name": "value",
+              "label": "Value (string)",
+              "type": "string",
+              "placeholder": "Apfel"
+            }
           ],
           "description": "Gibt true zurück wenn der Wert vorhanden ist.",
           "signature": "public bool ContainsValue(TValue value)",
@@ -489,7 +709,12 @@
         "IndexOfKey": {
           "label": "IndexOfKey(TKey)",
           "params": [
-            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "2" }
+            {
+              "name": "key",
+              "label": "Key (int)",
+              "type": "int",
+              "placeholder": "2"
+            }
           ],
           "description": "Gibt den nullbasierten Index des Schlüssels zurück, oder -1.",
           "signature": "public int IndexOfKey(TKey key)",
@@ -498,7 +723,12 @@
         "IndexOfValue": {
           "label": "IndexOfValue(TValue)",
           "params": [
-            { "name": "value", "label": "Value (string)", "type": "string", "placeholder": "Apfel" }
+            {
+              "name": "value",
+              "label": "Value (string)",
+              "type": "string",
+              "placeholder": "Apfel"
+            }
           ],
           "description": "Gibt den nullbasierten Index des ersten Vorkommens des Werts zurück, oder -1.",
           "signature": "public int IndexOfValue(TValue value)",
@@ -507,7 +737,12 @@
         "TryGetValue": {
           "label": "TryGetValue(TKey, out TValue)",
           "params": [
-            { "name": "key", "label": "Key (int)", "type": "int", "placeholder": "1" }
+            {
+              "name": "key",
+              "label": "Key (int)",
+              "type": "int",
+              "placeholder": "1"
+            }
           ],
           "description": "Versucht den Wert abzurufen ohne Exception.",
           "signature": "public bool TryGetValue(TKey key, out TValue value)",
@@ -542,7 +777,10 @@
       "id": "pk-ue1",
       "title": "Ü1-PK: Das Logistik-Zentrum",
       "source": "Aufgabensammlung Collections (Unterricht)",
-      "structures": ["Queue<int>", "Stack<int>"],
+      "structures": [
+        "Queue<int>",
+        "Stack<int>"
+      ],
       "difficulty": "Mittel",
       "description": "Ein Logistikunternehmen verarbeitet Pakete (ID-Nummern) nach Eingangsreihenfolge (FIFO). Beschädigte Pakete kommen auf einen Rückgabe-Stapel (LIFO).",
       "requirements": [
@@ -559,7 +797,10 @@
       "id": "pk-ue2",
       "title": "Ü2-PK: Der Druck-Spooler",
       "source": "Aufgabensammlung Collections (Unterricht)",
-      "structures": ["Queue<string>", "Stack<string>"],
+      "structures": [
+        "Queue<string>",
+        "Stack<string>"
+      ],
       "difficulty": "Mittel",
       "description": "In einem Büro-Netzwerk werden Druckaufträge nach Eingangsreihenfolge verarbeitet (FIFO). Dateien die nicht auf .pdf enden, schlagen fehl und kommen auf einen Fehler-Stapel (LIFO).",
       "requirements": [
@@ -575,7 +816,10 @@
       "id": "pk-ue3",
       "title": "Ü3-PK: Das Warenkorb-System",
       "source": "Aufgabensammlung Collections (Unterricht)",
-      "structures": ["List<int>", "Dictionary<int, string>"],
+      "structures": [
+        "List<int>",
+        "Dictionary<int, string>"
+      ],
       "difficulty": "Schwer",
       "description": "Ein Online-Shop analysiert Einkäufe. Artikel-IDs werden in einem Warenkorb gesammelt. Das System ermittelt einzigartige Produkte, deren Kategorien und berechnet Treuepunkte.",
       "requirements": [
@@ -592,7 +836,11 @@
       "id": "pk-ue4",
       "title": "Ü4-PK: Die Bibliothek",
       "source": "Aufgabensammlung Collections (Unterricht)",
-      "structures": ["List<string>", "Dictionary<string, int>", "Stack<string>"],
+      "structures": [
+        "List<string>",
+        "Dictionary<string, int>",
+        "Stack<string>"
+      ],
       "difficulty": "Schwer",
       "description": "Ein Bibliothekssystem verwaltet Buch-Rückgaben. Gültige ISBNs beginnen mit \"978\" – ungültige kommen auf einen Fehler-Stapel. Gültige ISBNs werden in einem Dictionary mit ihrer Rückgabe-Häufigkeit gezählt.",
       "requirements": [
@@ -609,7 +857,11 @@
       "id": "pk-ue5",
       "title": "Ü5-PK: Der Aufgaben-Dispatcher",
       "source": "Aufgabensammlung Collections (Unterricht)",
-      "structures": ["List<string>", "Stack<string>", "Queue<string>"],
+      "structures": [
+        "List<string>",
+        "Stack<string>",
+        "Queue<string>"
+      ],
       "difficulty": "Mittel",
       "description": "In einem Büro werden Aufgaben aus einer Liste verteilt. Aufgaben die mit \"DRINGEND:\" beginnen, kommen auf einen Prioritäts-Stapel (LIFO). Alle anderen in eine normale Warteschlange (FIFO).",
       "requirements": [
@@ -625,7 +877,9 @@
       "id": "nb-ue1",
       "title": "Ü1-NB: Büromaterial-Verwaltung",
       "source": "Class Notebook – Übungsbeispiele Collections",
-      "structures": ["Dictionary<string, int>"],
+      "structures": [
+        "Dictionary<string, int>"
+      ],
       "difficulty": "Mittel",
       "description": "Verwaltung von Büromaterial-Bestand in einem Unternehmen. Materialien nach Typ sortiert und einfach abrufbar.",
       "requirements": [
@@ -641,7 +895,9 @@
       "id": "nb-ue2",
       "title": "Ü2-NB: Text entschlüsseln",
       "source": "Class Notebook – Übungsbeispiele Collections",
-      "structures": ["List<string>"],
+      "structures": [
+        "List<string>"
+      ],
       "difficulty": "Schwer",
       "description": "Verschlüsselten komprimierten Text expandieren. Format: \"3a2b4x1d\" → \"aaabbxxxd\". Steht kein Ziffernwert vor Buchstaben, wird 1 angenommen.",
       "requirements": [
@@ -657,7 +913,9 @@
       "id": "nb-ue3",
       "title": "Ü3-NB: Bestellungen (SortedList)",
       "source": "Class Notebook – Übungsbeispiele Collections",
-      "structures": ["SortedList<DateTime, List<string>>"],
+      "structures": [
+        "SortedList<DateTime, List<string>>"
+      ],
       "difficulty": "Schwer",
       "description": "Verwaltung von Online-Shop-Bestellungen, automatisch nach Bestelldatum sortiert.",
       "requirements": [
@@ -674,7 +932,9 @@
       "id": "nb-ue4",
       "title": "Ü4-NB: Wörterbuch (Dictionary)",
       "source": "Class Notebook – Übungsbeispiele Collections",
-      "structures": ["Dictionary<string, Dictionary<string, string>>"],
+      "structures": [
+        "Dictionary<string, Dictionary<string, string>>"
+      ],
       "difficulty": "Schwer",
       "description": "Mehrsprachiges Wörterbuch verwalten. Dictionary<string, Dictionary<string, string>> – äußerer Key = Wort, innerer Key = Sprachkürzel.",
       "requirements": [
@@ -690,7 +950,9 @@
       "id": "nb-ue5",
       "title": "Ü5-NB: Browserverlauf (Stack)",
       "source": "Class Notebook – Übungsbeispiele Collections",
-      "structures": ["Stack<string>"],
+      "structures": [
+        "Stack<string>"
+      ],
       "difficulty": "Leicht",
       "description": "Einfacher Webbrowser – Navigationsverlauf in LIFO-Reihenfolge verwalten.",
       "requirements": [
@@ -706,7 +968,9 @@
       "id": "nb-ue6",
       "title": "Ü6-NB: To-Do-Liste (Queue)",
       "source": "Class Notebook – Übungsbeispiele Collections",
-      "structures": ["Queue<string>"],
+      "structures": [
+        "Queue<string>"
+      ],
       "difficulty": "Leicht",
       "description": "Einfache To-Do-Liste in FIFO-Reihenfolge (First-In-First-Out).",
       "requirements": [
@@ -722,7 +986,9 @@
       "id": "nb-ue7",
       "title": "Ü7-NB: Klammerncheck (Stack)",
       "source": "Class Notebook – Übungsbeispiele Collections",
-      "structures": ["Stack<char>"],
+      "structures": [
+        "Stack<char>"
+      ],
       "difficulty": "Mittel",
       "description": "Prüft ob Klammern in einer Zeichenkette korrekt geschachtelt sind, mit einem Stack.",
       "requirements": [
@@ -740,7 +1006,10 @@
       "id": "nb-ue8",
       "title": "Ü8-NB: Verschlüsselung (Dictionary/List)",
       "source": "Class Notebook – Übungsbeispiele Collections",
-      "structures": ["List<char>", "Dictionary<char, char>"],
+      "structures": [
+        "List<char>",
+        "Dictionary<char, char>"
+      ],
       "difficulty": "Schwer",
       "description": "Verschlüsselungsverfahren mit einem Schlüssel-String. Jeder Buchstabe des Alphabets wird einem Zeichen aus dem Schlüssel zugeordnet.",
       "requirements": [

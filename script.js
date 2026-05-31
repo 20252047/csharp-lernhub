@@ -1,0 +1,975 @@
+
+/* ═══════════════════════════════════════════════════════════
+   DATA LOADING
+═══════════════════════════════════════════════════════════ */
+let DATA = null;
+let REFERENCES = null;
+
+async function loadData() {
+  try {
+    const [dataRes, refRes] = await Promise.all([
+      fetch('data.json'),
+      fetch('references.json')
+    ]);
+    if (!dataRes.ok) throw new Error('data.json nicht erreichbar');
+    if (!refRes.ok) throw new Error('references.json nicht erreichbar');
+    DATA = await dataRes.json();
+    REFERENCES = await refRes.json();
+  } catch(e) {
+    console.error('JSON-Dateien konnten nicht geladen werden. Bitte lokal per Server öffnen.', e);
+    DATA = { structures: {}, exercises: [] };
+    REFERENCES = { meta: { title: 'Referenz nicht geladen', subtitle: String(e.message || e) }, sections: [] };
+  }
+  initApp();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   APP STATE
+═══════════════════════════════════════════════════════════ */
+const state = {
+  struct: 'String',
+  method: null,
+  // String state
+  strValue: 'Hallo Welt',
+  // List/Stack/Queue state (array of strings)
+  items: [],
+  // Dict/SortedList state (array of {key, value})
+  entries: [],
+};
+
+function initApp() {
+  bindUiEvents();
+  buildStructureDropdown();
+  onStructChange();
+  buildExercisesSidebar();
+  showFirstExercise();
+  buildReference();
+  initRefScrollSpy();
+}
+
+function bindUiEvents() {
+  document.querySelectorAll('[data-tab]').forEach(btn => {
+    btn.addEventListener('click', () => switchToTab(btn.dataset.tab));
+  });
+  document.querySelectorAll('[data-panel]').forEach(btn => {
+    btn.addEventListener('click', () => togglePanel(btn.dataset.panel));
+  });
+  document.getElementById('sel-struct')?.addEventListener('change', onStructChange);
+  document.getElementById('sel-method')?.addEventListener('change', onMethodChange);
+  document.getElementById('string-value-input')?.addEventListener('input', onStringValueChange);
+  document.getElementById('btn-execute')?.addEventListener('click', executeMethod);
+  document.getElementById('btn-clear-log')?.addEventListener('click', clearLog);
+  document.getElementById('btn-reset')?.addEventListener('click', resetState);
+}
+
+function buildStructureDropdown() {
+  const sel = document.getElementById('sel-struct');
+  if (!sel || !DATA?.structures) return;
+  sel.innerHTML = Object.entries(DATA.structures)
+    .map(([key, value]) => `<option value="${escHtml(key)}">${escHtml(value.label || key)}</option>`)
+    .join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TAB SWITCHING
+═══════════════════════════════════════════════════════════ */
+function switchToTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id)?.classList.add('active');
+
+  document.querySelectorAll('[data-tab]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === id);
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Backwards compatible wrappers for older inline handlers.
+function switchTab(id) { switchToTab(id); }
+function switchTabMobile(id) { switchToTab(id); }
+
+function togglePanel(panelId) {
+  // Only collapse on mobile
+  if (window.innerWidth >= 768) return;
+  const panel = document.getElementById(panelId);
+  if (panel) panel.classList.toggle('collapsed');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIMULATOR: STRUCTURE CHANGE
+═══════════════════════════════════════════════════════════ */
+function onStructChange() {
+  const sel = document.getElementById('sel-struct');
+  state.struct = sel.value;
+
+  const sd = DATA.structures[state.struct];
+  if (!sd) return;
+
+  // Info box
+  document.getElementById('struct-info-box').textContent = sd.description;
+
+  // String edit box
+  const strBox = document.getElementById('string-edit-box');
+  if (state.struct === 'String') {
+    strBox.hidden = false;
+    document.getElementById('string-value-input').value = state.strValue;
+  } else {
+    strBox.hidden = true;
+  }
+
+  // Reset state for this struct
+  if (state.struct === 'String') {
+    state.strValue = 'Hallo Welt';
+  } else if (state.struct === 'List' || state.struct === 'Stack' || state.struct === 'Queue') {
+    state.items = [...sd.initialItems];
+  } else {
+    state.entries = sd.initialItems.map(i => ({ key: i.key, value: i.value }));
+  }
+
+  // Method dropdown
+  buildMethodDropdown(sd);
+
+  // Reset method info
+  document.getElementById('method-info-box').innerHTML = '';
+  document.getElementById('params-box').innerHTML = '';
+  state.method = null;
+
+  // Update vis label
+  document.getElementById('vis-struct-label').textContent = sd.label;
+  document.getElementById('vis-last-op').textContent = '';
+
+  // Render
+  renderVisualization();
+  clearLog();
+}
+
+function onStringValueChange() {
+  state.strValue = document.getElementById('string-value-input').value;
+  renderVisualization();
+}
+
+function buildMethodDropdown(sd) {
+  const sel = document.getElementById('sel-method');
+  sel.innerHTML = '<option value="">– wählen –</option>';
+  for (const [key, m] of Object.entries(sd.methods)) {
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = m.label;
+    sel.appendChild(opt);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIMULATOR: METHOD CHANGE
+═══════════════════════════════════════════════════════════ */
+function onMethodChange() {
+  const sel = document.getElementById('sel-method');
+  const methodKey = sel.value;
+  if (!methodKey) {
+    document.getElementById('method-info-box').innerHTML = '';
+    document.getElementById('params-box').innerHTML = '';
+    state.method = null;
+    return;
+  }
+
+  state.method = methodKey;
+  const sd = DATA.structures[state.struct];
+  const m = sd.methods[methodKey];
+
+  // Info box
+  document.getElementById('method-info-box').innerHTML = `
+    <div class="method-info">
+      <div class="signature">${escHtml(m.signature)}</div>
+      <div class="desc">${escHtml(m.description)}</div>
+      <span class="return-type">Rückgabe: ${escHtml(m.returnType)}</span>
+    </div>`;
+
+  // Params
+  const pb = document.getElementById('params-box');
+  if (m.params.length === 0) {
+    pb.innerHTML = '<div class="form-hint" style="margin-bottom:10px">Keine Parameter</div>';
+  } else {
+    pb.innerHTML = m.params.map(p => `
+      <div class="form-group">
+        <label for="param-${p.name}">${escHtml(p.label)}</label>
+        <input type="${p.type === 'int' ? 'number' : 'text'}"
+               id="param-${p.name}"
+               placeholder="${escHtml(p.placeholder)}"
+               value="${escHtml(p.placeholder)}">
+      </div>`).join('');
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIMULATOR: EXECUTE
+═══════════════════════════════════════════════════════════ */
+function executeMethod() {
+  if (!state.method) { log('Bitte zuerst eine Methode auswählen.', 'warning'); return; }
+
+  const sd = DATA.structures[state.struct];
+  const m = sd.methods[state.method];
+
+  // Collect params
+  const params = {};
+  for (const p of m.params) {
+    const el = document.getElementById('param-' + p.name);
+    params[p.name] = p.type === 'int' ? parseInt(el.value, 10) : el.value;
+  }
+
+  try {
+    execAction(state.struct, state.method, params);
+    renderVisualization();
+  } catch(err) {
+    log('🔴 ' + err.message, 'error');
+  }
+}
+
+function execAction(struct, method, params) {
+  const op = `${struct}.${method}`;
+
+  if (struct === 'String') {
+    execString(method, params);
+  } else if (struct === 'List') {
+    execList(method, params);
+  } else if (struct === 'Stack') {
+    execStack(method, params);
+  } else if (struct === 'Queue') {
+    execQueue(method, params);
+  } else if (struct === 'Dictionary' || struct === 'SortedList') {
+    execDict(struct, method, params);
+  }
+  document.getElementById('vis-last-op').textContent = method + '()';
+}
+
+/* ── String logic ── */
+function execString(method, p) {
+  const s = state.strValue;
+  switch(method) {
+    case 'Length':
+      log(`Rückgabe: ${s.length}`, 'result');
+      log(`string.Length = ${s.length}`, 'info');
+      break;
+    case 'IndexOf':
+      { const idx = s.indexOf(p.value);
+        log(`Rückgabe: ${idx}`, 'result');
+        log(idx >= 0 ? `"${p.value}" gefunden an Index ${idx}` : `"${p.value}" nicht gefunden (-1)`, idx >= 0 ? 'success' : 'warning');
+      } break;
+    case 'LastIndexOf':
+      { const idx = s.lastIndexOf(p.value);
+        log(`Rückgabe: ${idx}`, 'result');
+        log(idx >= 0 ? `Letztes Vorkommen von "${p.value}" an Index ${idx}` : `"${p.value}" nicht gefunden (-1)`, idx >= 0 ? 'success' : 'warning');
+      } break;
+    case 'Substring1':
+      { if (p.startIndex < 0 || p.startIndex >= s.length)
+          throw new Error(`ArgumentOutOfRangeException: startIndex (${p.startIndex}) liegt außerhalb des gültigen Bereichs (0–${s.length - 1})`);
+        const r = s.substring(p.startIndex);
+        state.strValue = r;
+        document.getElementById('string-value-input').value = r;
+        log(`Rückgabe: "${r}"`, 'result');
+        log(`Substring ab Index ${p.startIndex}`, 'success');
+      } break;
+    case 'Substring2':
+      { if (p.startIndex < 0 || p.startIndex + p.length > s.length || p.length < 0)
+          throw new Error(`ArgumentOutOfRangeException: startIndex=${p.startIndex}, length=${p.length} – ungültiger Bereich für String der Länge ${s.length}`);
+        const r = s.substr(p.startIndex, p.length);
+        state.strValue = r;
+        document.getElementById('string-value-input').value = r;
+        log(`Rückgabe: "${r}"`, 'result');
+      } break;
+    case 'Replace_SS':
+      { const r = s.replaceAll(p.oldValue, p.newValue);
+        state.strValue = r;
+        document.getElementById('string-value-input').value = r;
+        log(`Rückgabe: "${r}"`, 'result');
+        log(`"${p.oldValue}" → "${p.newValue}"`, 'success');
+      } break;
+    case 'Replace_CC':
+      { if (p.oldChar.length !== 1 || p.newChar.length !== 1)
+          throw new Error(`ArgumentException: oldChar und newChar müssen genau 1 Zeichen sein.`);
+        const r = s.replaceAll(p.oldChar, p.newChar);
+        state.strValue = r;
+        document.getElementById('string-value-input').value = r;
+        log(`Rückgabe: "${r}"`, 'result');
+      } break;
+    case 'Split':
+      { const sep = p.separator === '\\t' ? '\t' : p.separator;
+        const parts = s.split(sep).filter(x => x.trim() !== '');
+        log(`Rückgabe: string[] mit ${parts.length} Elementen`, 'result');
+        parts.forEach((part, i) => log(`[${i}] = "${part}"`, 'info'));
+      } break;
+    case 'Contains_S':
+      { const has = s.includes(p.value);
+        log(`Rückgabe: ${has}`, 'result');
+        log(has ? `"${p.value}" ist enthalten` : `"${p.value}" ist NICHT enthalten`, has ? 'success' : 'warning');
+      } break;
+    case 'Insert':
+      { if (p.startIndex < 0 || p.startIndex > s.length)
+          throw new Error(`ArgumentOutOfRangeException: startIndex=${p.startIndex} ungültig (0–${s.length})`);
+        const r = s.slice(0, p.startIndex) + p.value + s.slice(p.startIndex);
+        state.strValue = r;
+        document.getElementById('string-value-input').value = r;
+        log(`Rückgabe: "${r}"`, 'result');
+      } break;
+    case 'Remove':
+      { if (p.startIndex < 0 || p.startIndex + p.count > s.length)
+          throw new Error(`ArgumentOutOfRangeException: startIndex=${p.startIndex}, count=${p.count} – ungültig für String der Länge ${s.length}`);
+        const r = s.slice(0, p.startIndex) + s.slice(p.startIndex + p.count);
+        state.strValue = r;
+        document.getElementById('string-value-input').value = r;
+        log(`Rückgabe: "${r}"`, 'result');
+        log(`${p.count} Zeichen ab Index ${p.startIndex} entfernt`, 'success');
+      } break;
+    case 'ToCharArray':
+      { const chars = s.split('');
+        log(`Rückgabe: char[] mit ${chars.length} Elementen`, 'result');
+        chars.forEach((c, i) => log(`[${i}] = '${c}'`, 'info'));
+      } break;
+    case 'ToUpper':
+      { const r = s.toUpperCase();
+        state.strValue = r;
+        document.getElementById('string-value-input').value = r;
+        log(`Rückgabe: "${r}"`, 'result');
+      } break;
+    case 'ToLower':
+      { const r = s.toLowerCase();
+        state.strValue = r;
+        document.getElementById('string-value-input').value = r;
+        log(`Rückgabe: "${r}"`, 'result');
+      } break;
+    case 'Trim':
+      { const r = s.trim();
+        state.strValue = r;
+        document.getElementById('string-value-input').value = r;
+        log(`Rückgabe: "${r}"`, 'result');
+        log(`${s.length - r.length} Leerzeichen entfernt`, 'success');
+      } break;
+    case 'IsNullOrEmpty':
+      { const empty = s === null || s === '';
+        log(`Rückgabe: ${empty}`, 'result');
+        log(empty ? 'String ist null oder leer' : 'String ist NICHT null oder leer', empty ? 'warning' : 'success');
+      } break;
+    case 'IsNullOrWhiteSpace':
+      { const ws = s === null || s.trim() === '';
+        log(`Rückgabe: ${ws}`, 'result');
+        log(ws ? 'String ist null, leer oder nur Whitespace' : 'String enthält sichtbare Zeichen', ws ? 'warning' : 'success');
+      } break;
+    default:
+      log('Methode nicht implementiert', 'warning');
+  }
+}
+
+/* ── List logic ── */
+function execList(method, p) {
+  switch(method) {
+    case 'Add':
+      state.items.push(p.item);
+      log(`"${p.item}" am Ende hinzugefügt`, 'success');
+      log(`Neue Count: ${state.items.length}`, 'info');
+      break;
+    case 'Insert':
+      { const idx = p.index;
+        if (idx < 0 || idx > state.items.length)
+          throw new Error(`ArgumentOutOfRangeException: Index ${idx} liegt außerhalb (0–${state.items.length})`);
+        state.items.splice(idx, 0, p.item);
+        log(`"${p.item}" an Index ${idx} eingefügt`, 'success');
+      } break;
+    case 'Remove':
+      { const i = state.items.indexOf(p.item);
+        if (i === -1) { log(`Rückgabe: false`, 'result'); log(`"${p.item}" nicht gefunden`, 'warning'); }
+        else { state.items.splice(i, 1); log(`Rückgabe: true`, 'result'); log(`"${p.item}" (Index ${i}) entfernt`, 'success'); }
+      } break;
+    case 'RemoveAt':
+      { const idx = p.index;
+        if (idx < 0 || idx >= state.items.length)
+          throw new Error(`ArgumentOutOfRangeException: Index ${idx} – gültig: 0–${state.items.length - 1}`);
+        const removed = state.items.splice(idx, 1)[0];
+        log(`"${removed}" an Index ${idx} entfernt`, 'success');
+      } break;
+    case 'Contains':
+      { const has = state.items.includes(p.item);
+        log(`Rückgabe: ${has}`, 'result');
+        log(has ? `"${p.item}" ist in der Liste` : `"${p.item}" ist NICHT in der Liste`, has ? 'success' : 'warning');
+      } break;
+    case 'IndexOf':
+      { const idx = state.items.indexOf(p.item);
+        log(`Rückgabe: ${idx}`, 'result');
+        log(idx >= 0 ? `"${p.item}" gefunden an Index ${idx}` : `"${p.item}" nicht gefunden (-1)`, idx >= 0 ? 'success' : 'warning');
+      } break;
+    case 'Sort':
+      state.items.sort((a, b) => a.localeCompare(b, 'de'));
+      log('Liste sortiert', 'success');
+      log(`[${state.items.join(', ')}]`, 'info');
+      break;
+    case 'Reverse':
+      state.items.reverse();
+      log('Reihenfolge umgekehrt', 'success');
+      break;
+    case 'Clear':
+      state.items = [];
+      log('Alle Elemente entfernt', 'success');
+      break;
+    case 'Count':
+      log(`Rückgabe: ${state.items.length}`, 'result');
+      break;
+    case 'ToArray':
+      log(`Rückgabe: string[] mit ${state.items.length} Elementen`, 'result');
+      state.items.forEach((it, i) => log(`[${i}] = "${it}"`, 'info'));
+      break;
+    default:
+      log('Methode nicht implementiert', 'warning');
+  }
+}
+
+/* ── Stack logic ── */
+function execStack(method, p) {
+  switch(method) {
+    case 'Push':
+      state.items.unshift(p.item);   // top = index 0
+      log(`"${p.item}" auf den Stack (Push)`, 'success');
+      break;
+    case 'Pop':
+      if (state.items.length === 0)
+        throw new Error('InvalidOperationException: Stack ist leer – Pop() nicht möglich!');
+      { const top = state.items.shift();
+        log(`Rückgabe: "${top}"`, 'result');
+        log(`"${top}" vom Stack entfernt (Pop)`, 'success');
+      } break;
+    case 'Peek':
+      if (state.items.length === 0)
+        throw new Error('InvalidOperationException: Stack ist leer – Peek() nicht möglich!');
+      log(`Rückgabe: "${state.items[0]}"`, 'result');
+      log(`Oberstes Element angezeigt (ohne Entfernen)`, 'info');
+      break;
+    case 'Contains':
+      { const has = state.items.includes(p.item);
+        log(`Rückgabe: ${has}`, 'result');
+        log(has ? `"${p.item}" ist im Stack` : `"${p.item}" ist NICHT im Stack`, has ? 'success' : 'warning');
+      } break;
+    case 'Clear':
+      state.items = [];
+      log('Stack geleert', 'success');
+      break;
+    case 'Count':
+      log(`Rückgabe: ${state.items.length}`, 'result');
+      break;
+    default:
+      log('Methode nicht implementiert', 'warning');
+  }
+}
+
+/* ── Queue logic ── */
+function execQueue(method, p) {
+  switch(method) {
+    case 'Enqueue':
+      state.items.push(p.item);
+      log(`"${p.item}" am Ende eingereiht (Enqueue)`, 'success');
+      break;
+    case 'Dequeue':
+      if (state.items.length === 0)
+        throw new Error('InvalidOperationException: Queue ist leer – Dequeue() nicht möglich!');
+      { const front = state.items.shift();
+        log(`Rückgabe: "${front}"`, 'result');
+        log(`"${front}" von vorne entfernt (Dequeue)`, 'success');
+      } break;
+    case 'Peek':
+      if (state.items.length === 0)
+        throw new Error('InvalidOperationException: Queue ist leer – Peek() nicht möglich!');
+      log(`Rückgabe: "${state.items[0]}"`, 'result');
+      log(`Vorderstes Element angezeigt (ohne Entfernen)`, 'info');
+      break;
+    case 'Contains':
+      { const has = state.items.includes(p.item);
+        log(`Rückgabe: ${has}`, 'result');
+        log(has ? `"${p.item}" ist in der Queue` : `"${p.item}" NICHT in der Queue`, has ? 'success' : 'warning');
+      } break;
+    case 'Clear':
+      state.items = [];
+      log('Queue geleert', 'success');
+      break;
+    case 'Count':
+      log(`Rückgabe: ${state.items.length}`, 'result');
+      break;
+    default:
+      log('Methode nicht implementiert', 'warning');
+  }
+}
+
+/* ── Dict / SortedList logic ── */
+function execDict(struct, method, p) {
+  const sorted = struct === 'SortedList';
+  function sortEntries() {
+    if (sorted) state.entries.sort((a, b) => a.key - b.key);
+  }
+  switch(method) {
+    case 'Add':
+      { const exists = state.entries.find(e => e.key === p.key);
+        if (exists) throw new Error(`ArgumentException: Key ${p.key} existiert bereits im Dictionary!`);
+        state.entries.push({ key: p.key, value: p.value });
+        sortEntries();
+        log(`{${p.key}: "${p.value}"} hinzugefügt`, 'success');
+        log(`Neue Count: ${state.entries.length}`, 'info');
+      } break;
+    case 'Remove':
+      { const idx = state.entries.findIndex(e => e.key === p.key);
+        if (idx === -1) { log(`Rückgabe: false`, 'result'); log(`Key ${p.key} nicht gefunden`, 'warning'); }
+        else {
+          const removed = state.entries.splice(idx, 1)[0];
+          log(`Rückgabe: true`, 'result');
+          log(`Key ${p.key} ("${removed.value}") entfernt`, 'success');
+        }
+      } break;
+    case 'RemoveAt':
+      { const idx = p.index;
+        if (idx < 0 || idx >= state.entries.length)
+          throw new Error(`ArgumentOutOfRangeException: Index ${idx} ungültig (0–${state.entries.length - 1})`);
+        const removed = state.entries.splice(idx, 1)[0];
+        log(`{${removed.key}: "${removed.value}"} an Index ${idx} entfernt`, 'success');
+      } break;
+    case 'ContainsKey':
+      { const has = state.entries.some(e => e.key === p.key);
+        log(`Rückgabe: ${has}`, 'result');
+        log(has ? `Key ${p.key} ist vorhanden` : `Key ${p.key} ist NICHT vorhanden`, has ? 'success' : 'warning');
+      } break;
+    case 'ContainsValue':
+      { const has = state.entries.some(e => e.value === p.value);
+        log(`Rückgabe: ${has}`, 'result');
+        log(has ? `Wert "${p.value}" gefunden` : `Wert "${p.value}" NICHT gefunden`, has ? 'success' : 'warning');
+      } break;
+    case 'TryGetValue':
+      { const entry = state.entries.find(e => e.key === p.key);
+        if (entry) {
+          log(`Rückgabe: true`, 'result');
+          log(`out value = "${entry.value}"`, 'result');
+          log(`Key ${p.key} → "${entry.value}"`, 'success');
+        } else {
+          log(`Rückgabe: false`, 'result');
+          log(`out value = null (Key ${p.key} nicht gefunden)`, 'warning');
+        }
+      } break;
+    case 'Clear':
+      state.entries = [];
+      log('Alle Einträge entfernt', 'success');
+      break;
+    case 'Count':
+      log(`Rückgabe: ${state.entries.length}`, 'result');
+      break;
+    case 'Capacity':
+      log(`Rückgabe: ${Math.max(state.entries.length, 4)} (intern)`, 'result');
+      log('Capacity wächst automatisch bei Bedarf', 'info');
+      break;
+    case 'IndexOfKey':
+      { const idx = state.entries.findIndex(e => e.key === p.key);
+        log(`Rückgabe: ${idx}`, 'result');
+        log(idx >= 0 ? `Key ${p.key} liegt an Index ${idx}` : `-1 (nicht gefunden)`, idx >= 0 ? 'success' : 'warning');
+      } break;
+    case 'IndexOfValue':
+      { const idx = state.entries.findIndex(e => e.value === p.value);
+        log(`Rückgabe: ${idx}`, 'result');
+        log(idx >= 0 ? `Wert "${p.value}" liegt an Index ${idx}` : `-1 (nicht gefunden)`, idx >= 0 ? 'success' : 'warning');
+      } break;
+    default:
+      log('Methode nicht implementiert', 'warning');
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   VISUALIZATION
+═══════════════════════════════════════════════════════════ */
+function renderVisualization() {
+  const container = document.getElementById('vis-container');
+  const sd = DATA.structures[state.struct];
+  if (!sd) return;
+
+  // Update count badge
+  let countText = '';
+  if (state.struct === 'String') {
+    countText = `Länge: ${state.strValue.length}`;
+  } else if (state.struct === 'List' || state.struct === 'Stack' || state.struct === 'Queue') {
+    countText = `Count: ${state.items.length}`;
+  } else {
+    countText = `Count: ${state.entries.length}`;
+  }
+  document.getElementById('vis-count-badge').textContent = countText;
+
+  switch(sd.visualType) {
+    case 'array': renderArrayVis(container); break;
+    case 'list':  renderArrayVis(container); break;
+    case 'stack': renderStackVis(container); break;
+    case 'queue': renderQueueVis(container); break;
+    case 'dictionary': renderDictVis(container); break;
+  }
+}
+
+function renderArrayVis(container) {
+  // Items = individual chars for String, or state.items for List
+  const isStr = state.struct === 'String';
+  const items = isStr ? state.strValue.split('') : state.items;
+
+  if (items.length === 0) {
+    container.innerHTML = '<div class="vis-empty">Leere ' + (isStr ? 'Zeichenkette' : 'Liste') + ' – String.Empty</div>';
+    return;
+  }
+
+  const cells = items.map((item, i) => `
+    <div class="array-cell">
+      <span class="cell-index">${i}</span>
+      ${escHtml(item)}
+    </div>`).join('');
+
+  container.innerHTML = `
+    <div class="array-vis">
+      <div style="font-size:11px;color:var(--text3);font-family:var(--font-code);margin-bottom:4px">
+        ${isStr ? `"${escHtml(state.strValue)}"` : `List&lt;string&gt; [${items.length} Elemente]`}
+      </div>
+      <div class="array-cells-wrapper">
+        <div class="array-cells">${cells}</div>
+      </div>
+    </div>`;
+}
+
+function renderStackVis(container) {
+  const items = state.items;
+  if (items.length === 0) {
+    container.innerHTML = '<div class="vis-empty">Stack ist leer<br><span style="font-size:11px">Pop/Peek → InvalidOperationException</span></div>';
+    return;
+  }
+
+  const rows = items.map((item, i) => `
+    <div class="stack-item ${i === 0 ? 'top' : ''}">
+      ${escHtml(item)}
+    </div>`).join('');
+
+  container.innerHTML = `
+    <div class="stack-vis">
+      <div class="stack-arrow">↑ Push / Pop ↓</div>
+      <div class="stack-items">${rows}</div>
+      <div class="stack-bottom-label">↓ Boden (Bottom)</div>
+    </div>`;
+}
+
+function renderQueueVis(container) {
+  const items = state.items;
+  if (items.length === 0) {
+    container.innerHTML = '<div class="vis-empty">Queue ist leer<br><span style="font-size:11px">Dequeue/Peek → InvalidOperationException</span></div>';
+    return;
+  }
+
+  const cells = items.map((item, i) => `
+    <div class="queue-item ${i === 0 ? 'front' : ''}">
+      <span class="queue-item-pos">${i === 0 ? 'FRONT' : `[${i}]`}</span>
+      ${escHtml(item)}
+    </div>`).join('');
+
+  container.innerHTML = `
+    <div class="queue-vis">
+      <div class="queue-direction-row">
+        <span class="queue-out">← Dequeue (vorne)</span>
+        <span style="color:var(--text3);margin:0 8px">|</span>
+        <span class="queue-in">Enqueue (hinten) →</span>
+      </div>
+      <div class="queue-track">
+        <div class="queue-end-label queue-end-out">OUT</div>
+        <div class="queue-items">${cells}</div>
+        <div class="queue-end-label queue-end-in">IN</div>
+      </div>
+    </div>`;
+}
+
+function renderDictVis(container) {
+  const entries = state.entries;
+  const isSorted = state.struct === 'SortedList';
+
+  if (entries.length === 0) {
+    container.innerHTML = '<div class="vis-empty">Keine Einträge</div>';
+    return;
+  }
+
+  const rows = entries.map((e, i) => `
+    <tr>
+      <td class="key-cell">${escHtml(String(e.key))}</td>
+      <td class="val-cell">${escHtml(e.value)}</td>
+      ${isSorted ? `<td style="color:var(--text3);font-size:11px;text-align:right">[${i}]</td>` : ''}
+    </tr>`).join('');
+
+  container.innerHTML = `
+    <div class="dict-vis">
+      <table class="dict-table">
+        <thead>
+          <tr>
+            <th>Key (int)</th>
+            <th>Value (string)</th>
+            ${isSorted ? '<th style="text-align:right">Index</th>' : ''}
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+      ${isSorted ? '<div style="font-size:11px;color:var(--text3);margin-top:6px;font-family:var(--font-code)">↑ automatisch nach Key sortiert</div>' : ''}
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   OUTPUT LOG
+═══════════════════════════════════════════════════════════ */
+function log(message, type = 'info') {
+  const container = document.getElementById('output-log');
+  // Remove placeholder
+  const placeholder = container.querySelector('.log-empty');
+  if (placeholder) placeholder.remove();
+
+  const entry = document.createElement('div');
+  entry.className = `log-entry ${type}`;
+
+  const typeLabels = { info: 'Info', success: 'OK', error: 'Exception', warning: 'Warnung', result: 'Rückgabe' };
+  entry.innerHTML = `<span class="log-type">${typeLabels[type] || type}</span>${escHtml(message)}`;
+  container.appendChild(entry);
+  container.scrollTop = container.scrollHeight;
+}
+
+function clearLog() {
+  document.getElementById('output-log').innerHTML = '<div class="log-empty">Noch keine Ausgabe.<br>Methode ausführen →</div>';
+}
+
+function resetState() {
+  const sd = DATA.structures[state.struct];
+  if (!sd) return;
+  if (state.struct === 'String') {
+    state.strValue = 'Hallo Welt';
+    document.getElementById('string-value-input').value = state.strValue;
+  } else if (state.struct === 'List' || state.struct === 'Stack' || state.struct === 'Queue') {
+    state.items = [...sd.initialItems];
+  } else {
+    state.entries = sd.initialItems.map(i => ({ key: i.key, value: i.value }));
+  }
+  renderVisualization();
+  clearLog();
+  document.getElementById('vis-last-op').textContent = '';
+  log('Zustand zurückgesetzt', 'warning');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   EXERCISES
+═══════════════════════════════════════════════════════════ */
+function buildExercisesSidebar() {
+  const sidebar = document.getElementById('ex-sidebar');
+  if (!DATA.exercises) return;
+
+  const pkExercises = DATA.exercises.filter(e => e.id.startsWith('pk-'));
+  const nbExercises = DATA.exercises.filter(e => e.id.startsWith('nb-'));
+
+  let html = '<div class="ex-sidebar-header">Aufgaben</div>';
+
+  html += '<div class="ex-group-label" style="border-top:none;margin-top:0">Aufgabensammlung (POS1)</div>';
+  pkExercises.forEach(ex => {
+    html += `<div class="ex-nav-item" data-id="${ex.id}" onclick="showExercise('${ex.id}', this)">
+      <span style="flex:1;font-size:12px">${escHtml(ex.title)}</span>
+      <span class="diff-badge diff-${ex.difficulty.toLowerCase()}">${escHtml(ex.difficulty)}</span>
+    </div>`;
+  });
+
+  html += '<div class="ex-group-label">Class Notebook</div>';
+  nbExercises.forEach(ex => {
+    html += `<div class="ex-nav-item" data-id="${ex.id}" onclick="showExercise('${ex.id}', this)">
+      <span style="flex:1;font-size:12px">${escHtml(ex.title)}</span>
+      <span class="diff-badge diff-${ex.difficulty.toLowerCase()}">${escHtml(ex.difficulty)}</span>
+    </div>`;
+  });
+
+  sidebar.innerHTML = html;
+}
+
+function showExercise(id, el) {
+  // Highlight active
+  document.querySelectorAll('.ex-nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+
+  const ex = DATA.exercises.find(e => e.id === id);
+  if (!ex) return;
+
+  const detail = document.getElementById('ex-detail');
+
+  const reqItems = ex.requirements.map(r => `<li>${escHtml(r)}</li>`).join('');
+  const structTags = ex.structures.map(s => `<span class="struct-tag">${escHtml(s)}</span>`).join(' ');
+
+  let solutionHtml;
+  if (ex.solution) {
+    solutionHtml = `
+      <div class="solution-accordion">
+        <button class="solution-toggle" onclick="toggleSolution(this)">
+          🔒 Lösung anzeigen
+          <span class="toggle-icon">▼</span>
+        </button>
+        <div class="solution-body">
+          <div class="solution-code">${highlightCsharp(ex.solution)}</div>
+        </div>
+      </div>`;
+  } else {
+    solutionHtml = `
+      <div class="solution-accordion">
+        <button class="solution-toggle" style="cursor:default;opacity:0.6">
+          ✏️ Lösung noch ausstehend
+        </button>
+        <div class="solution-body open">
+          <div class="solution-placeholder">Für diese Aufgabe ist noch keine Musterlösung vorhanden.<br>Versuche sie selbst zu lösen!</div>
+        </div>
+      </div>`;
+  }
+
+  detail.innerHTML = `
+    <div class="ex-meta">
+      <span class="ex-source-badge">${escHtml(ex.source)}</span>
+      ${structTags}
+      <span class="diff-badge diff-${ex.difficulty.toLowerCase()}">${escHtml(ex.difficulty)}</span>
+    </div>
+    <h1 class="ex-title">${escHtml(ex.title)}</h1>
+    <p class="ex-description">${escHtml(ex.description)}</p>
+
+    <div class="ex-section-title">Anforderungen</div>
+    <ul class="req-list">${reqItems}</ul>
+
+    <div class="ex-section-title">Erwartete Konsolenausgabe</div>
+    <div class="expected-output">${escHtml(ex.expectedOutput)}</div>
+
+    ${solutionHtml}`;
+}
+
+function toggleSolution(btn) {
+  btn.classList.toggle('open');
+  const body = btn.nextElementSibling;
+  body.classList.toggle('open');
+  btn.textContent = btn.classList.contains('open') ? '🔓 Lösung verbergen ' : '🔒 Lösung anzeigen ';
+  const icon = document.createElement('span');
+  icon.className = 'toggle-icon';
+  icon.textContent = '▼';
+  btn.appendChild(icon);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIMPLE C# SYNTAX HIGHLIGHTER
+═══════════════════════════════════════════════════════════ */
+function highlightCsharp(code) {
+  const escaped = escHtml(code);
+
+  const keywords = ['using','namespace','class','static','void','private','public','internal','new','if','else','while','foreach','in','return','true','false','null','int','string','bool','char','double','var','out','throw'];
+  const types = ['Queue','Stack','List','Dictionary','SortedList','HashSet','Console','String','KeyValuePair','DateTime'];
+
+  let result = escaped;
+
+  // Comments
+  result = result.replace(/(\/\/[^\n]*)/g, '<span class="tok-cmt">$1</span>');
+
+  // Strings
+  result = result.replace(/(&quot;[^&]*?&quot;)/g, '<span class="tok-str">$1</span>');
+
+  // Keywords
+  keywords.forEach(kw => {
+    result = result.replace(new RegExp(`\\b(${kw})\\b`, 'g'), '<span class="tok-kw">$1</span>');
+  });
+
+  // Types
+  types.forEach(t => {
+    result = result.replace(new RegExp(`\\b(${t})\\b`, 'g'), '<span class="tok-type">$1</span>');
+  });
+
+  // Numbers
+  result = result.replace(/\b(\d+)\b/g, '<span class="tok-num">$1</span>');
+
+  return result;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════════════════════ */
+function escHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+
+function showFirstExercise() {
+  const first = DATA?.exercises?.[0];
+  if (!first) return;
+  const firstNode = document.querySelector(`.ex-nav-item[data-id="${first.id}"]`);
+  if (firstNode) showExercise(first.id, firstNode);
+}
+
+function buildReference() {
+  const side = document.getElementById('ref-sidenav');
+  const content = document.getElementById('ref-content');
+  if (!side || !content || !REFERENCES) return;
+
+  const sections = REFERENCES.sections || [];
+  side.innerHTML = `
+    <div class="ref-sidenav-header">Inhalt</div>
+    ${sections.map(sec => `<a class="ref-navlink" href="#${escHtml(sec.id)}">${escHtml(sec.title)}</a>`).join('')}
+  `;
+
+  content.innerHTML = `
+    <div class="ref-page-header">
+      <p class="eyebrow">Referenz</p>
+      <h1 class="ref-h1">${escHtml(REFERENCES.meta?.title || 'C# Referenz')}</h1>
+      <p class="ref-subtitle">${escHtml(REFERENCES.meta?.subtitle || '')}</p>
+    </div>
+    ${sections.map(renderReferenceSection).join('')}
+  `;
+}
+
+function renderReferenceSection(section) {
+  const cards = (section.cards || []).map(card => `
+    <article class="ref-section">
+      <div class="ref-method-head">
+        <span class="ref-method-name">${escHtml(card.name)}</span>
+        <span class="ref-tag">${escHtml(card.kind || 'Info')}</span>
+        <span class="ref-returns">→ ${escHtml(card.returns || '')}</span>
+      </div>
+      <div class="ref-when">Wann: ${escHtml(card.when || '')}</div>
+      ${card.code ? `<pre class="ref-pre">${highlightCsharp(card.code)}</pre>` : ''}
+      ${card.note ? `<div class="ref-note">${escHtml(card.note)}</div>` : ''}
+    </article>
+  `).join('');
+
+  return `
+    <section id="${escHtml(section.id)}" class="ref-block">
+      <h2 class="ref-h2-section">${escHtml(section.title)}</h2>
+      ${section.intro ? `<p class="ref-prose">${escHtml(section.intro)}</p>` : ''}
+      <div class="ref-grid">${cards}</div>
+    </section>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   REFERENZ SCROLL SPY
+═══════════════════════════════════════════════════════════ */
+function initRefScrollSpy() {
+  const content = document.querySelector('.ref-content');
+  if (!content) return;
+  const links = document.querySelectorAll('.ref-navlink');
+  const sections = document.querySelectorAll('.ref-content [id]');
+
+  content.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (sec.offsetTop - 80 <= content.scrollTop) current = sec.id;
+    });
+    links.forEach(l => {
+      l.classList.remove('active');
+      if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+    });
+  });
+
+  // Override anchor clicks to scroll inside .ref-content
+  links.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+}
+
+/* ── Boot ── */
+loadData();

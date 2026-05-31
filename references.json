@@ -1,0 +1,249 @@
+{
+  "meta": {
+    "title": "C# String & Collections Referenz",
+    "subtitle": "Mobile-first Kurzreferenz für POS1: wichtigste Methoden, Fehlerquellen und typische Muster.",
+    "updated": "2026-05-31"
+  },
+  "sections": [
+    {
+      "id": "string-basics",
+      "title": "String: Grundkonzepte",
+      "icon": "S",
+      "intro": "Strings sind unveränderlich. Methoden wie Replace, Trim oder ToUpper ändern den bestehenden String nicht, sondern geben einen neuen String zurück.",
+      "cards": [
+        {
+          "name": "Immutability",
+          "kind": "Konzept",
+          "returns": "string",
+          "when": "Ergebnis von String-Methoden immer speichern.",
+          "code": "string s = \"Hallo\";\ns.Replace(\"Hallo\", \"Welt\");      // falsch: Ergebnis verworfen\ns = s.Replace(\"Hallo\", \"Welt\"); // richtig",
+          "note": "Prüfungsfehler: Methode aufrufen, aber Rückgabewert nicht zuweisen."
+        },
+        {
+          "name": "s.Length",
+          "kind": "Eigenschaft",
+          "returns": "int",
+          "when": "Zeichen zählen, Schleifen begrenzen, letzten Index berechnen.",
+          "code": "string s = \"Hallo\";\nConsole.WriteLine(s.Length);      // 5\nConsole.WriteLine(s.Length - 1);  // letzter Index",
+          "note": "Length ist eine Eigenschaft: keine Klammern."
+        },
+        {
+          "name": "s[index]",
+          "kind": "Indexer",
+          "returns": "char",
+          "when": "Einzelnes Zeichen lesen.",
+          "code": "char erstes = s[0];\nchar letztes = s[s.Length - 1];\n// s[0] = 'X'; // nicht erlaubt",
+          "note": "Direktes Schreiben ist bei string nicht möglich."
+        }
+      ]
+    },
+    {
+      "id": "string-search",
+      "title": "String: Suchen & Prüfen",
+      "icon": "?",
+      "intro": "Suchmethoden liefern meist einen Index oder bool. Bei IndexOf immer -1 behandeln.",
+      "cards": [
+        {
+          "name": "IndexOf(value)",
+          "kind": "Methode",
+          "returns": "int",
+          "when": "Erstes Vorkommen suchen.",
+          "code": "string s = \"animal\";\nint pos = s.IndexOf(\"n\"); // 1\nif (pos != -1) { /* gefunden */ }",
+          "note": "-1 bedeutet: nicht gefunden."
+        },
+        {
+          "name": "LastIndexOf(value)",
+          "kind": "Methode",
+          "returns": "int",
+          "when": "Letztes Vorkommen suchen, z.B. Dateiendung.",
+          "code": "string file = \"myFile.txt\";\nint dot = file.LastIndexOf('.');\nstring ext = file.Substring(dot); // .txt",
+          "note": "Vor Substring prüfen, ob dot != -1 ist."
+        },
+        {
+          "name": "Contains(value)",
+          "kind": "Methode",
+          "returns": "bool",
+          "when": "Prüfen, ob ein Teilstring enthalten ist.",
+          "code": "string s = \"The quick brown fox\";\nConsole.WriteLine(s.Contains(\"fox\")); // True",
+          "note": "Für Position brauchst du IndexOf, nicht Contains."
+        },
+        {
+          "name": "StartsWith / EndsWith",
+          "kind": "Methode",
+          "returns": "bool",
+          "when": "Anfang oder Ende prüfen, z.B. URLs oder Extensions.",
+          "code": "string url = \"www.google.com\";\nConsole.WriteLine(url.StartsWith(\"www.\"));\nConsole.WriteLine(url.EndsWith(\".com\"));",
+          "note": "Nützlich für Validierung."
+        }
+      ]
+    },
+    {
+      "id": "string-extract",
+      "title": "String: Extrahieren",
+      "icon": "<>",
+      "intro": "Substring, Split und ToCharArray sind zentrale Werkzeuge für Aufgaben mit Textzerlegung.",
+      "cards": [
+        {
+          "name": "Substring(startIndex)",
+          "kind": "Methode",
+          "returns": "string",
+          "when": "Alles ab einer Position bis zum Ende holen.",
+          "code": "string s = \"Hallo Welt\";\nstring teil = s.Substring(6); // Welt",
+          "note": "startIndex muss innerhalb des Strings liegen."
+        },
+        {
+          "name": "Substring(startIndex, length)",
+          "kind": "Methode",
+          "returns": "string",
+          "when": "Genau N Zeichen ausschneiden.",
+          "code": "string s = \"Hallo Welt\";\nstring teil = s.Substring(6, 4); // Welt",
+          "note": "Der zweite Parameter ist die Länge, nicht der Endindex."
+        },
+        {
+          "name": "Split(separator)",
+          "kind": "Methode",
+          "returns": "string[]",
+          "when": "CSV, Eingaben oder Listenwerte zerlegen.",
+          "code": "string csv = \"Mathe;Deutsch;POS1\";\nstring[] teile = csv.Split(';');\nforeach (string t in teile) Console.WriteLine(t);",
+          "note": "Split gibt ein Array zurück."
+        },
+        {
+          "name": "ToCharArray()",
+          "kind": "Methode",
+          "returns": "char[]",
+          "when": "Wenn einzelne Zeichen verändert werden sollen.",
+          "code": "char[] chars = \"Hallo\".ToCharArray();\nchars[0] = 'X';\nstring neu = new string(chars);",
+          "note": "char[] ist veränderbar, string nicht."
+        }
+      ]
+    },
+    {
+      "id": "string-modify",
+      "title": "String: Ändern",
+      "icon": "*",
+      "intro": "Alle Änderungsmethoden erzeugen einen neuen String. Zuweisung nicht vergessen.",
+      "cards": [
+        {
+          "name": "Replace(old, new)",
+          "kind": "Methode",
+          "returns": "string",
+          "when": "Alle Vorkommen ersetzen.",
+          "code": "string s = \"This docment uses docments\";\ns = s.Replace(\"docment\", \"document\");",
+          "note": "Ersetzt alle passenden Stellen."
+        },
+        {
+          "name": "Insert(index, value)",
+          "kind": "Methode",
+          "returns": "string",
+          "when": "Text vor einem Index einfügen.",
+          "code": "string s = \"aaabbb\";\ns = s.Insert(3, \" \" ); // aaa bbb\ns = s.Insert(s.Length, \"!\");",
+          "note": "Für das Ende ist der Index Length richtig."
+        },
+        {
+          "name": "Remove(startIndex, count)",
+          "kind": "Methode",
+          "returns": "string",
+          "when": "Bestimmte Anzahl Zeichen löschen.",
+          "code": "string s = \"Hello World\";\ns = s.Remove(5, 6); // Hello",
+          "note": "startIndex + count darf nicht größer als Length sein."
+        },
+        {
+          "name": "Trim / ToUpper / ToLower",
+          "kind": "Methode",
+          "returns": "string",
+          "when": "Eingaben bereinigen und normalisieren.",
+          "code": "string input = \"  Ja  \";\ninput = input.Trim().ToLower();\nif (input == \"ja\") { }",
+          "note": "Sehr häufig vor Vergleichen oder TryParse."
+        }
+      ]
+    },
+    {
+      "id": "collections",
+      "title": "Collections: Überblick",
+      "icon": "[]",
+      "intro": "List, Stack, Queue, Dictionary und SortedList unterscheiden sich vor allem durch Zugriff, Reihenfolge und typische Operationen.",
+      "cards": [
+        {
+          "name": "List<T>",
+          "kind": "Collection",
+          "returns": "Indexbasiert",
+          "when": "Flexible Liste mit Zugriff über Index.",
+          "code": "List<string> namen = new List<string>();\nnamen.Add(\"Anna\");\nnamen.Insert(0, \"Max\");\nnamen.RemoveAt(1);",
+          "note": "Count ist Eigenschaft, nicht Methode."
+        },
+        {
+          "name": "Stack<T>",
+          "kind": "Collection",
+          "returns": "LIFO",
+          "when": "Zuletzt hinzugefügtes Element kommt zuerst heraus.",
+          "code": "Stack<string> stack = new Stack<string>();\nstack.Push(\"A\");\nstring top = stack.Peek();\nstring item = stack.Pop();",
+          "note": "Pop/Peek werfen bei leerem Stack eine InvalidOperationException."
+        },
+        {
+          "name": "Queue<T>",
+          "kind": "Collection",
+          "returns": "FIFO",
+          "when": "Warteschlange: erstes Element kommt zuerst heraus.",
+          "code": "Queue<string> q = new Queue<string>();\nq.Enqueue(\"A\");\nstring first = q.Peek();\nstring item = q.Dequeue();",
+          "note": "Dequeue/Peek nur verwenden, wenn Count > 0 ist."
+        },
+        {
+          "name": "Dictionary<TKey,TValue>",
+          "kind": "Collection",
+          "returns": "Key/Value",
+          "when": "Schneller Zugriff über eindeutigen Schlüssel.",
+          "code": "Dictionary<int,string> d = new Dictionary<int,string>();\nd.Add(1, \"Huber\");\nif (d.TryGetValue(1, out string name))\n    Console.WriteLine(name);",
+          "note": "TryGetValue ist sicherer als direkter Indexzugriff."
+        },
+        {
+          "name": "SortedList<TKey,TValue>",
+          "kind": "Collection",
+          "returns": "sortiert",
+          "when": "Key/Value-Paare automatisch nach Key sortieren.",
+          "code": "SortedList<int,string> sl = new SortedList<int,string>();\nsl.Add(3, \"Zebra\");\nsl.Add(1, \"Apfel\");",
+          "note": "Doppelte Keys sind nicht erlaubt."
+        }
+      ]
+    },
+    {
+      "id": "exceptions",
+      "title": "Exception Handling",
+      "icon": "!",
+      "intro": "try-catch verhindert Programmabstürze. Noch besser: ungültige Zustände vorher prüfen.",
+      "cards": [
+        {
+          "name": "try-catch-finally",
+          "kind": "Pattern",
+          "returns": "Kontrollfluss",
+          "when": "Code kann eine Exception werfen.",
+          "code": "try\n{\n    int zahl = int.Parse(input);\n}\ncatch (FormatException ex)\n{\n    Console.WriteLine(ex.Message);\n}\nfinally\n{\n    // wird immer ausgeführt\n}",
+          "note": "Für Zahlen ist TryParse meist besser."
+        },
+        {
+          "name": "IndexOutOfRangeException",
+          "kind": "Exception",
+          "returns": "Fehler",
+          "when": "Array/String-Index existiert nicht.",
+          "code": "if (index >= 0 && index < s.Length)\n{\n    char c = s[index];\n}",
+          "note": "Vor Zugriff immer Bereich prüfen."
+        },
+        {
+          "name": "ArgumentOutOfRangeException",
+          "kind": "Exception",
+          "returns": "Fehler",
+          "when": "Substring/Remove/Insert mit ungültigem Bereich.",
+          "code": "if (start >= 0 && start + len <= s.Length)\n{\n    string part = s.Substring(start, len);\n}",
+          "note": "Besonders wichtig bei dynamischen Benutzereingaben."
+        },
+        {
+          "name": "InvalidOperationException",
+          "kind": "Exception",
+          "returns": "Fehler",
+          "when": "Pop/Peek/Dequeue auf leerer Collection.",
+          "code": "if (stack.Count > 0)\n{\n    string item = stack.Pop();\n}",
+          "note": "Count prüfen."
+        }
+      ]
+    }
+  ]
+}
